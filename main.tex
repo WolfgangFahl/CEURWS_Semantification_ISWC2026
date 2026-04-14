@@ -65,7 +65,7 @@
 %% Article Info
 
 
-\title{SemPubFlow: a novel Scientific Publishing Workflow using Knowledge Graphs, Wikidata and LLMs -- the CEUR-WS use case}
+\title{Semantify CEUR-WS}
 
 \author{Wolfgang Fahl\inst{1}\orcidID{0000-0002-0821-6995} \and
 Tim Holzheim\inst{1}\orcidID{0000-0003-2533-6363} \and
@@ -80,15 +80,10 @@ SIB Swiss Institute of Bioinformatics, Switzerland}
 \begin{document}
 \maketitle
 \begin{abstract}
-The CEUR Workshop Proceedings (CEUR-WS) platform has been pivotal in disseminating scientific workshop and conference proceedings since 1995. This paper introduces a paradigm shift towards a semantified, consistent, and FAIR (Findable, Accessible, Interoperable, and Reusable) knowledge graph, emphasizing the critical role of Single Source of Truth (SSoT) and Single Point of Truth (SPoT) in scholarly publishing and reducing the data quality responsibility burden on CEUR-WS editors.
-Our SemPubFlow approach modernizes the legacy pipeline of manual HTML and PDF content curation by 
-expecting the metadata to be supplied first. It enables the 
-public open source collection of necessary data for event series, events, 
-proceedings, papers, editors, authors, and affiliated institutions 
-directly by the stakeholders of a scientific event as early as possible. 
-The traditional Extract, Transform, Load (ETL) processes that convert existing artifacts into a comprehensive knowledge graph are only needed during the transition to this workflow. The novel approach leverages Large Language Models (LLMs) and the Wikidata knowledge graph, generating the SPoT representing CEUR-WS as the SSoT.
-This way our methodology not only streamlines the recreation of legacy artifacts but also addresses the \tquote{long tail} problem inherent in CEUR-WS's diverse and evolving data. This paper outlines the transition strategy, avoiding a \tquote{big bang} approach, to ensure the continuity and integrity of scholarly communication. The resulting solution is efficient in attaining the necessary level of coverage, accuracy and scalability. Data protection issues can easily be overcome in this context since even the personal data is intended to be public.
-The advancements presented promise to enhance publication processes across various contexts, offering a blueprint for future scholarly publishing infrastructures.
+The CEUR Workshop Proceedings (CEUR-WS) is a non profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the needed metadata to be used by indexers such as DBLP and german national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher with the goal to allow semantic handling with modern tools. 
+
+In this work we show how the semantification is in progress and wikidata has been used as the core infrastructure to overcome the obstacles that the change in workflow has ben struggling with since the 2015 Sempub challenge.
+
 \end{abstract}
 \keywords{Knowledge Graph \and Linked Data \and Metadata Extraction \and Publishing \and Semantic Web \and Wikidata}
 
