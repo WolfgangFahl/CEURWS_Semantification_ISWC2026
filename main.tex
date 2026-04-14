@@ -22,11 +22,10 @@
 %   Oshani Seneviratne, Rensselaer Polytechnic Institute, USA
 %   Contact: iswc2026-in-use@easychair.org
 %
-% Based on prior SWJ submission (IOS Press template -- to be migrated to LNCS, see issue #2)
+% Based on prior SWJ submission, now migrated to LNCS
 % Original: extended version of Text2KG ESWC 2023 Workshop paper
 
-% additional options: [seceqn,secthm,crcready]
-\documentclass[sw]{iosart2x}
+\documentclass[runningheads]{llncs}
 
 %% Packages
 \usepackage{dcolumn}
@@ -50,8 +49,7 @@
 % source code rendering
 \usepackage{minted}
 
-% ORCID rendering
-\newcommand{\orcidID}[1]{\href{https://orcid.org/#1}{\includegraphics[width=8pt]{orcid.png}}}
+% ORCID rendering provided by llncs.cls
 
 % typographical quoting
 \newcommand{\tquote}[1]{``#1''}
@@ -65,53 +63,22 @@
 \newcommand{\wdqTable}[2]{\href{https://www.wikidata.org/wiki/#2}{#1 (#2)}}
 
 %% Article Info
-%\firstpage{1}  % IOS Press specific -- remove after LNCS migration
-%\lastpage{4}   % IOS Press specific -- remove after LNCS migration
-%\volume{1}     % IOS Press specific -- remove after LNCS migration
-%\pubyear{0000} % IOS Press specific -- remove after LNCS migration
+
+
+\title{SemPubFlow: a novel Scientific Publishing Workflow using Knowledge Graphs, Wikidata and LLMs -- the CEUR-WS use case}
+
+\author{Wolfgang Fahl\inst{1}\orcidID{0000-0002-0821-6995} \and
+Tim Holzheim\inst{1}\orcidID{0000-0003-2533-6363} \and
+Christoph Lange\inst{1,2}\orcidID{0000-0001-9879-3827} \and
+Stefan Decker\inst{1,2}\orcidID{0000-0001-6324-7164} \and
+Jerven Bolleman\inst{3}\orcidID{0000-0002-7449-1266}}
+
+\institute{RWTH Aachen University, Computer Science i5, Aachen, Germany \and
+Fraunhofer FIT, Sankt Augustin, Germany \and
+SIB Swiss Institute of Bioinformatics, Switzerland}
 
 \begin{document}
-\begin{frontmatter} % The preamble begins here.
-% 
-\title{SemPubFlow: a novel Scientific Publishing Workflow using Knowledge Graphs, Wikidata and LLMs – the CEUR-WS use case }
-
-% https://www.compart.com/de/unicode/U+2013
-% – En Dash
-%  -- – - “ `` ” '' \" \dots … ...
-\runtitle{SemPubFlow: a novel Scientific Publishing Workflow using Knowledge Graphs, Wikidata and LLMs – the CEUR-WS use case}
-%\subtitle{Subtitle}
-
-\begin{aug}
-    \author[A]{\inits{W.F.}\fnms{Wolfgang} \snm{Fahl}\ead[label=e1]{fahl@dbis.rwth-aachen.de}
-    \orcidID{0000-0002-0821-6995}}
-    \thanks{Corresponding author. \printead{e1}.}
-    \author[A]{\inits{T.H.}\fnms{Tim} \snm{Holzheim}\ead[label=e2]{tim.holzheim@rwth-aachen.de}
-    \orcidID{0000-0003-2533-6363}}
-    \author[A,B]{\inits{C.L.}\fnms{Christoph} \snm{Lange}\ead[label=e3]{lange@cs.rwth-aachen.de}
-    \orcidID{0000-0001-9879-3827}}
-    \author[A,B]{\inits{S.D.}\fnms{Stefan} \snm{Decker}\ead[label=e4]{decker@dbis.rwth-aachen.de}
-    \orcidID{0000-0001-6324-7164}}
-
-    \address[A]{\orgname{RWTH Aachen University, Computer Science i5, Aachen},
-    \cny{Germany}\printead[presep={\\}]{e1,e2,e3,e4}}
-    \address[B]{\orgname{Fraunhofer FIT, Sankt Augustin},
-    \cny{Germany}}
-\end{aug}
-
-% SWJ open review blocks removed -- not applicable for ISWC
-%\begin{review}{editor}
-%\reviewer{\fnms{First} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
-%\reviewer{\fnms{Second} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
-%\end{review}
-%\begin{review}{solicited}
-%\reviewer{\fnms{First Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-%\reviewer{\fnms{Second Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-%\end{review}
-%\begin{review}{open}
-%\reviewer{\fnms{First Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-%\reviewer{\fnms{Second Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-%\end{review}
-
+\maketitle
 \begin{abstract}
 The CEUR Workshop Proceedings (CEUR-WS) platform has been pivotal in disseminating scientific workshop and conference proceedings since 1995. This paper introduces a paradigm shift towards a semantified, consistent, and FAIR (Findable, Accessible, Interoperable, and Reusable) knowledge graph, emphasizing the critical role of Single Source of Truth (SSoT) and Single Point of Truth (SPoT) in scholarly publishing and reducing the data quality responsibility burden on CEUR-WS editors.
 Our SemPubFlow approach modernizes the legacy pipeline of manual HTML and PDF content curation by 
@@ -123,15 +90,7 @@ The traditional Extract, Transform, Load (ETL) processes that convert existing a
 This way our methodology not only streamlines the recreation of legacy artifacts but also addresses the \tquote{long tail} problem inherent in CEUR-WS's diverse and evolving data. This paper outlines the transition strategy, avoiding a \tquote{big bang} approach, to ensure the continuity and integrity of scholarly communication. The resulting solution is efficient in attaining the necessary level of coverage, accuracy and scalability. Data protection issues can easily be overcome in this context since even the personal data is intended to be public.
 The advancements presented promise to enhance publication processes across various contexts, offering a blueprint for future scholarly publishing infrastructures.
 \end{abstract}
-\begin{keyword}
-\kwd{Knowledge Graph}
-\kwd{Linked Data}
-\kwd{Metadata Extraction}
-\kwd{Publishing}
-\kwd{Semantic Web}
-\kwd{Wikidata}
-\end{keyword}
-\end{frontmatter}
+\keywords{Knowledge Graph \and Linked Data \and Metadata Extraction \and Publishing \and Semantic Web \and Wikidata}
 
 \section{Introduction}\label{sec:Introduction}
 Traditional publishing workflows often involve redundant and manual curation of data at various stages in the lifecycle of an event, each leaving distinct digital traces. Therefore the metadata is not readily available applying state of the art  FAIR,  SPoT and SSoT principles. These  FAIR principles are outlined in sections ~\ref{sec:FAIR} mandating the metadata being Findable, Accessible, Interoperable, and Reusable (FAIR), supplying the data  based on a Single Source of Truth (SSoT) that is represented by a Knowledge Graph (KG) as a Single Point of Truth (SPoT).
@@ -1016,7 +975,7 @@ This paper is dedicated to the memory of CEUR-WS board member Ralf Klamma $\dag$
 This research has been partly funded by a grant of the Deutsche Forschungsgemeinschaft (DFG). \footnote{\href{https://gepris.dfg.de/gepris/projekt/426477583}{ConfIDent project; see https://gepris.dfg.de/gepris/projekt/426477583}}
 
 % Bibliography
-\bibliographystyle{ios1}
+\bibliographystyle{splncs04}
 \bibliography{text2kgjournal2023}
 
 \end{document}
