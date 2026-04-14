@@ -1,0 +1,61 @@
+@startuml
+@startuml
+skinparam backgroundColor #EEEBDA
+
+|Chairs|
+start
+:
+Begin the publishing journey
+* Understand CEUR-WS.org Policy
+* Check Preconditions for Publishing
+;
+->inform authors about CEURW-WS Rules;
+
+|Authors|
+:
+Prepare manuscript and metadata
+* Prepare Submission
+;
+-> manuscript and metadata are prepared;
+
+|Chairs|
+:
+Submission and agreement collection
+* Open New Ticket for Submission
+* Collect Signed AUTHOR-AGREEMENTs from Authors
+;
+
+|CEUR-WS Editors|
+:
+Review Submission and Agreements
+* Upload Submission if Compliant
+* Review and publish process
+* Handle Corrections within 2 days post-publication
+* Correction window
+;
+
+if (Adopted CC BY 4.0 License?) then (yes)
+  :
+  Reflect Policy Changes Post-2019
+Ensure Open Access Policy
+* Maintain Author and Editor Rights
+* Rights management
+  ;
+else (no)
+  stop
+endif
+
+:
+
+;
+
+|Chairs|
+:
+Make Publication Decision
+* Final publication decision
+;
+
+stop
+@enduml
+
+@enduml
