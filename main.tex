@@ -1,12 +1,29 @@
-% extended version of Text2KG ESWC 2023 Workshop paper
-% see
-% https://de.overleaf.com/project/6401b98b9c98f06ccca60c34
-% Accepted and published  for Text2KG Workshop 2023 colocated with EWSC 2023
-% https://aiisc.ai/text2kg2023
-% Series: https://scholia.toolforge.org/event-series/Q116982161
+% ISWC 2026 In-Use Track submission
+% Target: https://iswc2026.semanticweb.org/#/calls/in-use
 %
-% IOS template files from 
-% https://github.com/vtex-soft/texsupport.iospress-sw
+% ISWC 2026 In-Use Track CFP Key Dates:
+%   Abstract submission due:    2 May 2026
+%   Full paper submission due:  7 May 2026
+%   Rebuttal:                   11 June - 18 June 2026
+%   Notifications:              16 July 2026
+%   Camera-ready papers due:    6 August 2026
+%   Conference:                 27 - 29 October 2026
+%   All deadlines 23:59 AoE
+%
+% Submission details:
+%   Max 15 pages (excl. references and "Declaration of use of Generative AI")
+%   Format: LNCS (Springer Lecture Notes in Computer Science)
+%   Review: single-blind (not anonymous)
+%   Submission via EasyChair (abstract pre-submission required)
+%   Published: Springer LNCS proceedings
+%
+% Track Chairs:
+%   Ernesto Jimenez-Ruiz, City St George's, University of London, UK
+%   Oshani Seneviratne, Rensselaer Polytechnic Institute, USA
+%   Contact: iswc2026-in-use@easychair.org
+%
+% Based on prior SWJ submission (IOS Press template -- to be migrated to LNCS, see issue #2)
+% Original: extended version of Text2KG ESWC 2023 Workshop paper
 
 % additional options: [seceqn,secthm,crcready]
 \documentclass[sw]{iosart2x}
@@ -48,10 +65,10 @@
 \newcommand{\wdqTable}[2]{\href{https://www.wikidata.org/wiki/#2}{#1 (#2)}}
 
 %% Article Info
-\firstpage{1}
-\lastpage{4}
-\volume{1}
-\pubyear{0000}
+%\firstpage{1}  % IOS Press specific -- remove after LNCS migration
+%\lastpage{4}   % IOS Press specific -- remove after LNCS migration
+%\volume{1}     % IOS Press specific -- remove after LNCS migration
+%\pubyear{0000} % IOS Press specific -- remove after LNCS migration
 
 \begin{document}
 \begin{frontmatter} % The preamble begins here.
@@ -81,18 +98,19 @@
     \cny{Germany}}
 \end{aug}
 
-\begin{review}{editor}
-\reviewer{\fnms{First} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
-\reviewer{\fnms{Second} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
-\end{review}
-\begin{review}{solicited}
-\reviewer{\fnms{First Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-\reviewer{\fnms{Second Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-\end{review}
-\begin{review}{open}
-\reviewer{\fnms{First Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-\reviewer{\fnms{Second Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
-\end{review}
+% SWJ open review blocks removed -- not applicable for ISWC
+%\begin{review}{editor}
+%\reviewer{\fnms{First} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
+%\reviewer{\fnms{Second} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
+%\end{review}
+%\begin{review}{solicited}
+%\reviewer{\fnms{First Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
+%\reviewer{\fnms{Second Solicited} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
+%\end{review}
+%\begin{review}{open}
+%\reviewer{\fnms{First Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
+%\reviewer{\fnms{Second Open} \snm{Reviewer}\address{\orgname{University or Company name}, \cny{Country}}}
+%\end{review}
 
 \begin{abstract}
 The CEUR Workshop Proceedings (CEUR-WS) platform has been pivotal in disseminating scientific workshop and conference proceedings since 1995. This paper introduces a paradigm shift towards a semantified, consistent, and FAIR (Findable, Accessible, Interoperable, and Reusable) knowledge graph, emphasizing the critical role of Single Source of Truth (SSoT) and Single Point of Truth (SPoT) in scholarly publishing and reducing the data quality responsibility burden on CEUR-WS editors.
