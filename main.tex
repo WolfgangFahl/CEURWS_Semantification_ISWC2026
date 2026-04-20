@@ -69,7 +69,7 @@
 %% Article Info
 
 
-\title{Semantify CEUR-WS}
+\title{Semantified CEUR-WS in Wikidata}
 
 \author{Wolfgang Fahl\inst{1}\orcidID{0000-0002-0821-6995} \and
 Tim Holzheim\inst{1,2}\orcidID{0000-0003-2533-6363} \and
@@ -86,17 +86,20 @@ SIB Swiss Institute of Bioinformatics, Switzerland}
 \begin{abstract}
 The CEUR Workshop Proceedings (CEUR-WS) is a non profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the needed metadata to be used by indexers such as DBLP and german national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher with the goal to allow semantic handling with modern tools. 
 
-In this work we show how the semantification is in progress and wikidata has been used as the core infrastructure to overcome the obstacles that the change in workflow has been struggling with since the 2015 Sempub challenge.
+In this work we show how the semantification is in progress and Wikidata has been used as the core target infrastructure to overcome the obstacles that the change in workflow has been struggling with since the 2015 Sempub challenge.
 
 \end{abstract}
 \keywords{Knowledge Graph \and Linked Data \and Metadata Extraction \and Publishing \and Semantic Web \and Wikidata}
 
 \section{Introduction}\label{sec:Introduction}
-Traditional publishing workflows often involve redundant and manual curation of data at various stages in the lifecycle of an event, each leaving distinct digital traces. Therefore the metadata is not readily available applying state of the art  FAIR,  SPoT and SSoT principles. These  FAIR principles are outlined in sections ~\ref{sec:FAIR} mandating the metadata being Findable, Accessible, Interoperable, and Reusable (FAIR), supplying the data  based on a Single Source of Truth (SSoT) that is represented by a Knowledge Graph (KG) as a Single Point of Truth (SPoT).
+\begin{figure}
+    \centering
+    \includesvg[width=\linewidth]{images/CoreEntities.svg}
+    \caption{Most relevant entities for scientific publishing}
+     \label{fig:core_entities}
+\end{figure}
+Traditional publishing workflows often involve redundant and manual curation of metadata for the most relevant entities (see Figure~\ref{fig:core_entities}) at various stages in the lifecycle of an event, each leaving distinct digital traces. Therefore, the metadata is not readily available for applying state-of-the-art Findable, Accessible, Interoperable, and Reusable (FAIR) ~\ref{sec:FAIR}, Single Point of Truth (SPoT), and Single Source of Truth (SSoT) principles. This work shows how the HTML/PDF SSoT of CEUR-WS at the ceur-ws.org domain (SPoT) has been used to create a Knowledge Graph representation of the relevant entities in Wikidata.
 
-\textbf{Single Source of Truth (SSoT)}: in IT and data management SSoT refers to having one reference source for data, ensuring that everyone in an organization bases decisions on the same data. This concept is particularly important in complex distributed and networked environments where data might be stored in multiple databases or systems. The goal of a SSoT, is avoid data discrepancies and redundancies, which can lead to inefficiencies and errors. SSoT is therefore a fundamental principle in database design, data integration strategies, and enterprise information management.
-
-\textbf{Single Point of Truth (SPoT)}: in contexts such as  software engineering, project management, and digital asset management. SPoT emphasizes that all stakeholders have access to one definitive source of information, ensuring consistency and accuracy. The SPoT principle ensures that everyone uses the most current and accurate version of digital assets.
 
 \begin{table}
 \caption{Scientific Event Lifecycle stages}
@@ -121,16 +124,16 @@ Referencing/Quoting & Academic Community & Citations, references in future works
 \end{tabular}
 \end{table}
 
-\textbf{Digital Traces of Scientific Events during their lifecyle:} Table~\ref{tab:ScientificEventLifecycle} shows the stages of the scientific event lifecycle that cumulatively contribute to the growing digital footprint of scholarly work, reflecting the increasing exposure to the academic community.
+\textbf{Digital Traces of Scientific Events during their lifecyle:} Table~\ref{tab:ScientificEventLifecycle} shows the stages of the scientific event lifecycle that cumulatively create artifacts related to the event.
 
-Moving the responsibility for curating data for relevant entities (see Figure~\ref{fig:core_entities}) to an earlier stage and thus to the event organizers, while semi-automating the process with LLM support, has several benefits. The quality of the data will increase, and its availability will be much earlier, thus influencing FAIRness---e.g., ensuring computer-readable versions of the core entities are available for downstream systems. Involving a community such as Wikidata in open source style will further enhance the result \footnote{And will create follow-up issues for the single point of truth data to be discussed later}.  
+Moving the responsibility for curating data for relevant entities (see Figure~\ref{fig:core_entities}) to an earlier stage and thus to the event organizers, while semi-automating the process has several benefits. The quality of the data will increase, and its availability will be much earlier, thus influencing FAIRness---e.g., ensuring computer-readable versions of the core entities are available for downstream systems at each step in the lifecycle. Involving a community such as Wikidata in open source style will further enhance the result \footnote{And will create follow-up issues for the single point of truth data to be discussed later}.  
 
-Scientific communication increasingly relies on the use of knowledge graphs, as exemplified by \footnotelink{https://scholar.google.com/}{Google Scholar} and the evolution of Microsoft Academic Graph~\cite{Wang2020} into OpenAlex~\cite{Priem2022}. Legacy systems based on technologies such as MARC~\cite{Ganseman2015}, PICA~\cite{Costers1997}  or XML are also adapting, highlighted by DBLP's adoption of RDF/SPARQL, with the  \footnotelink{https://qlever.cs.uni-freiburg.de/dblp}{QLever DBLP SPARQL endpoint}~\cite{Bast2017} being the most up-to date.
+Scientific communication increasingly relies on the use of knowledge graphs, as exemplified by \footnotelink{https://scholar.google.com/}{Google Scholar} and the evolution of Microsoft Academic Graph~\cite{Wang2020} into OpenAlex~\cite{Priem2022}. Legacy systems based on technologies such as MARC~\cite{Ganseman2015}, PICA~\cite{Costers1997}  or XML are also adapting, highlighted by DBLP's adoption of RDF/SPARQL, with the  \footnotelink{https://qlever.cs.uni-freiburg.de/dblp}{QLever DBLP SPARQL endpoint}~\cite{Bast2017} being the most up-to-date.
 
 \subsection{CEUR Workshop Proceedings}
 The CEUR Workshop Proceedings (CEUR-WS) publishing platform (https://ceur-ws.org/) were introduced in 1995 as a means of publishing proceedings of scientific workshops (and smaller conferences) in computer science. 
 
-CEUR-WS offers a free online service that provides open access to  the published proceedings hosted by RWTH Aachen University's Chair for Information Systems and Databases. CEUR-WS is operated by the CEUR-WS Editors -- a team of unpaid volunteers -- working as a de facto non-profit organization. 3,600 Volumes containing over 66,500 PDF documents in total have been published until December 2023.
+CEUR-WS offers a free online service that provides open access to  the published proceedings hosted by RWTH Aachen University's Chair for Information Systems and Databases. CEUR-WS is operated by the CEUR-WS Editors -- a team of unpaid volunteers -- working as a de facto non-profit organization. 3,600 Volumes containing over 66,500 PDF documents have been published in total until December 2023.
 
 Technically, all data and metadata of the proceedings are directly represented using HTML, PDF and a filesystem directory hierarchy, and delivered via the HTTP and FTP protocols. 
 
@@ -150,12 +153,6 @@ Persistent Identifiers (PIDs) and rich metadata are the core components of the F
 
 Representing digital traces of scholarly communication in Knowledge Graphs (KGs)~\cite{Hogan_2021} is useful for supporting use cases such as literature search and recommendation of events for attendance or publishing. The metadata of the most relevant entities as outlined in Figure~\ref{fig:core_entities}\footnote{The original SVG (see \texttt{http://cr.bitplan.com}) has clickable links to the Wikidata properties and entity types} need to be made available to offer such a knowledge graph. The the entities at the core of this work are depicted in bold and blue.
 
-\begin{figure}
-    \centering
-    \includesvg[width=\linewidth]{images/CoreEntities.svg}
-    \caption{Most relevant entities for scientific publishing}
-     \label{fig:core_entities}
-\end{figure}
 
 The term \tquote{Semantic Web}~\cite{BernersLee2001} has been coined by Tim-Berners Lee et al.\ to describe the effect of resources on the Web interlinked making use of such metadata.
 Therefore \tquote{Semantification} was chosen as the title of the project and this paper to describe the process of creating a Knowledge Graph and making the results available in a Semantic Web fashion. The Semantification of CEUR-WS has been attempted multiple times in the past~\cite{Lange2014,Sateli2015} -- always under the assumption that a self-maintained RDF/SPARQL endpoint would be the goal to achieve. The results have not been consistent and durable since the publishing workflow has not been adapted and the single point of truth for the metadata is still buried in the HTML/PDF documents often in pure text sections. The fear of maintenance follow-up problems, given that CEUR-WS is a non-profit service with no budget, was a major obstacle. 
