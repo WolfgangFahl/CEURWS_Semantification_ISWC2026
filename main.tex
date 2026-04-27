@@ -232,8 +232,6 @@ The core contributions presented in this work are:
     \item Splitting the metadata for the three main entities Event, Event Series and Proceedings as a major step towards improving the metadata quality, e.g., by allowing event series data to be checked for completeness and be completed from different sources where possible. Unfortunately, currently none of the stakeholders have shown enough motivation to do this completion, while it is valuable, e.g., for assessing the quality of an event series. The necessary change of perspective to convince the stakeholders is a chicken-egg problem, which the CEUR-WS semantification will help to facilitate. 
 
     \item Providing a bootstrapping~\cite{Bardini2001,Engelbart2007} approach to get rid of manual editing of the CEUR-WS website content and instead using a CMS approach based on the single-point-of-truth metadata that separates the concerns of storage and display. Making sure the results are already visible and usable during the ongoing CEUR-WS semantification transition project.
-
-    \item Introduction of SemPubFlow, a scientific publishing workflow that shifts from traditional manual curation to an automated tool based approach that leverages Large Language Model Systems and Wikidata. This workflow enhances the FAIRness of scholarly communications in all 15 aspects for all relevant core entities as early as possible. The benefits of this approach will predominantly manifest in the later stages of the Scientific Event Lifecycle where the high quality metadata is available for diverse usecases.
     
 \end{enumerate}
 
@@ -618,8 +616,9 @@ Consent, Public Data, and Contractual Necessity are crucial for scholarly publis
 \label{sec:implementations_and_demos}
 
 \subsection{Open Source}
-The Python library for the CEUR-WS semantification including the source code for the \footnotelink{http://ceur-ws-browser.bitplan.com/}{CEUR-WS Volume browser} is available as open source on 
-\footnotelink{https://github.com/WolfgangFahl/pyCEURmake}{github}. 
+The CEUR-WS semantification projects are open sourced via the repositories of the  
+\footnotelink{https://github.com/ceurws}{github ceurws organization}. 
+
 
 A \footnotelink{http://ceur-ws.bitplan.com}{prototype for the presentation} of the CEUR-WS Semantification results has been created using Semantic MediaWiki~\cite{Kroetzsch2011} (SMW), which is using the same MediaWiki open source engine as Wikipedia. SMW has extensions for markup that is transforms subject-predicate-object statements to triples, which leads to a \tquote{Semantification} of the Wiki by making the triples available for query.
 Like most SMW installations we are using the standard SQL based triplestore and ask queries and not RDF/SPARQL \cite{Fahl2020}. 
@@ -644,15 +643,7 @@ Figure~\ref{fig:cvb_screenshot} shows a screenshot of the CEUR-WS Volume Browser
     \label{fig:cvb_details}
 \end{figure}
 Figure~\ref{fig:cvb_details} shows an enlarged section of the screenshot where the links between the proceedings volumes and the external knowlede graphs are presented. In the example, these are \footnotelink{http://www.wikidata.org/entity/Q115053286}{wikidataitem}, \footnotelink{https://dblp.org/db/conf/semweb/wikidata2022}{dblp}, \footnotelink{https://opac.k10plus.de/DB=2.299/PPNSET?PPN=1830580760}{k10plus}, and the Scholia links to the proceedings, event and \footnotelink{https://scholia.toolforge.org/event-series/Q106429025}{event series} (which has links to the event and proceedings). 
-\subsection{CEUR-WS Semantic MediaWiki}
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=\linewidth]{images/ceurws_wiki_list_of_papers.png}
-    \caption{List of example CEUR-WS Papers in the CEUR-WS Semantic MediaWiki}
-    \label{fig:ceurws_wiki}
-\end{figure}
-The CEUR-WS Semantic MediaWiki is available as a prototype as depicted in Figure~\ref{fig:ceurws_wiki}, which shows how a content management system approach may be applied to the metadata, which allows for new features such as full text search. Semantic MediaWiki is a useful prototyping tool, since it allows to try out semantic properties and relations that are not yet fit for full public exposure via Wikidata and allows to both visualizes the semantificiation and query the results via APIs. 
-The example screenshot shows how a MediaWiki displays links with non-existing targets in red, allowing to judge the coverage of the disambiguation easily. 
+
 
 \subsection{CEUR-WS Single Point of Truth Server}
 \label{sec:single_point_of_truth_server}
@@ -694,131 +685,8 @@ Figure~\ref{fig:ceur-spt-screenshot} shows an example paper from the second TEXT
 
 When scholars change their name over time they are often inclined to ask to have their name changed in the original publications. While this is mostly not feasible the paper endpoint approach with an author bar allows to display the new name. 
 
-\subsection{SemPubFlow tool}
-\label{sec:sempubflow_tool}
-The SemPubFlow tool is a web based interactive system that supports Authors, Chairs and Editors in assembling the necessary metadata for the core entities needed for the publication of scientific event proceedings. 
 
-The need for such a tool was stated by proceedings editors in interviews done in the context of the ESWC@TEXT2KG workshop. Mostly the metadata for the events and proceedings is already available as part of e.g. homepages or paper and a tool for collecting this data effectively has been envisoned with \footnotelink{https://github.com/ceurws/ceur-make}{CEURmake} earlier.  
 
-The editors explicitly asked for separation of the proceedings compilation process from the publication process itself.
-
-SemPubflow is developed as an open source python project at \footnotelink{https://github.com/WolfgangFahl/SemPubFlow}{github}. To try it out credentials are needed since there is cost involved in using some of the services---see section~\ref{sec:llm_extraction} \footnote{Ask the corresponding author for access of use local installation with your own OpenAI key}.
-
-Figure~\ref{fig:homepage_llm_extraction} shows an example homepage extraction for the CEUR-WS Volume 3591 OM2023 Ontology matching homepage  \texttt{http://om2023.ontologymatching.org/}
-
-\begin{figure}
-    \centering
-    %\includegraphics[width=\linewidth]{ceur-ws_events_map.png}
-    \includegraphics[width=0.5\linewidth]{images/OM2023LLMExtraction.png}
-    \caption{Example of Event Metadata extraction from homepage}
-    \label{fig:homepage_llm_extraction}
-\end{figure}
-
-The complete set of all relevant core-entity instance for proceedings is interactively collectable by SemPubFlow with a preview of the Volume index.html file available to compare with the traditional static approach\footnote{Making this preview service available via API will be a key feature}.
-
-\section{Results}\label{sec:Results}
-% The Devil is in the detail
-% Volume 3330, 3350 and 3369 broken
-% local |  ↔  | wikidata | 3594 | 99.97% |
-
-\subsection{Disambiguation}
-With our extraction method for editors, we are able to obtain 11,764 editor signatures from 3354 volumes.
-Comparing these signatures against the editor records, we were able to query from dblp, it showed that 9321 signatures (4942 unique editors) can be linked to DBLP and thus have at least a \wdp{DBLP author id}{P2456}.
-For 2233 volumes, this means that all their editors can be extracted and disambiguated to a DBLP author id.
-But it also showed that, for 387 volumes, the extraction method returned fewer editors as defined in dblp, with the majority of these volumes being the early 500 volumes that were manually created with a high variety in format.
-
-With the goal to enter the editors into Wikidata, the editor signature also needs to be disambiguated to a Qid.
-Having the DBLP author id greatly helps in the disambiguation process as it allows to query DBLP for more person identifiers.
-This list of identifiers can then be used to query Wikidata to check if a person exists with at least one of those identifiers.
-The check against Wikidata showed that 1467 editors could be identified, and it also showed 62 conflicting items.
-We found that DBLP's coverage of person metadata synchronized with Wikidata is already leading to only 77  CEUR-WS editors missing.
-%The conflict can either mean that DBLP describes more than one person with one id or Wikidata.
-%Comparing the editors we found in Wikidata based on all the ids DBLP provides we only found 77 additional editors suggesting that DBLP already synchronizes the person identifiers with Wikidata if a link is established.
-Applying the disambiguation results and linking to CEUR-WS and DBLP metadata will require mass editing of Wikidata via the  CEUR-WS bot \cite{ceur-ws-bot-request2023} see section~\ref{sec:future_work}. 
-
-\subsection{LLM-based homepage metadata extraction}
-\label{sec:llm_extraction}
-The SemPubFlow tool offers to extract event metadata from the homepage of an event to assist in obtaining the metadata for the core entities and to avoid the tedious and error prone cut \& paste task involved from getting the metadata from a homepage. The OpenAI Chat-GPT API is used for this purpose. The prompts given to the LLM for the 
-\footnotelink{https://cr.bitplan.com/index.php/Workdocumentation\_2023-12-22}{ChatGPT experiment} have been documented and are part ot the SemPubFlow software now. An excerpt of the prompt prefix is shown below.
-
-\begin{verbatim}
-provide the event signature elements:
-- Acronym: The short name of the conference, often in uppercase.
-- Frequency: How often the event occurs, like annual or biennial.
-...
-- Year: The year in which the event takes place.
-- Ordinal: The instance number of the event, like 18th or 1st.
-- Date: The start and end date or date range of the event.
-...
-- Title: The full title of the event, often indicating the scope and subject.
-- Subject: The main topic or focus of the event.
-
-in YAML Format.
-...
-Use ISO date format for dates. 
-Use start_date and end_date as field names. 
-Give the year as a 4 digit integer.
-Give the location as country/region and city
-Give the country using a 2 digit ISO 3166-1 alpha-2 code
-Give the region using ISO_3166-2 code
-...
-valid answers e.g. would look like
-# AVICH 2022
-acronym: "AVICH 2022"
-event_type: "Workshop"
-...
-  
-Extract as instructed from the following homepage text:
-\end{verbatim}
-An experiment was conducted with 250 random homepages selected from the 2876 CEUR-WS Volumes that have homepage references. Only 1455 of these URLs were available and only 817 made the content-length available to be able to select pages that are not too long for LLM analysis. The average content length was 20142 chars which is close to the limit of the standard 4K token boundary of the default ChatGPT models. See \footnotelink{https://cr.bitplan.com/index.php/Workdocumentation\_2023-12-21}{Histograms of content and text length}.
-
-An example response for the CEUR-WS Volume 1029 (ZEUS 2013) homepage  \texttt{http://zeus-workshop.eu/2013/} was:
-
-\begin{minted}{yaml}
-- volume: 1029
-  acronym: ZEUS Workshop 2013
-  event_type: Workshop
-  year: 2013
-  start_date: '2013-02-21'
-  end_date: '2013-02-22'
-  country: DE
-  region: DE-MV
-  city: Rostock
-  title: Fifth Central European Workshop on Services and their Composition
-  subject: Services and their Composition
-\end{minted}
-
-The responses were compared with the CEUR-WS single point of truth.
-
-Table~\ref{tab:homepage_attributes} shows the results of this experiment with  ChatGPT-3.5-turbo as the model and  a temperature of 0.0.
-
-The availability and extractability of the attributes in the range of 56.0\% to 96.0\% with a median of 89.6\% is promising and shows the feasibility of the approach. The precision, recall and f1 values are shown just for reference – in some cases fuzzy matching would be needed – e.g., for the title there has been not a single 100\% match. The countries could not be matched, since we asked for ISO country codes, while the single point of truth has full country names, so "IT" and "Italy" would not match. Regions were too rarely available.  Manual inspection of the data shows the consistency being over 80\% with only minor changes being necessary in the case of inconsistencies.
-
-The reproducibility of the experiment results was 82\%. The median response time was 2 secs. More often than not the instruction not to add any other comments or content than requested was ignored and the YAML-loader would filter away the superfluous results.
-
-The total cost of the API usage was US\$1.07 or 0.4 cents per homepage. 
-
-Given these results and the cost and time advantage of LLMs over doing the same work with human curators we expect a strong motivation to adopt this approach.  
-
-\begin{table}
-\centering
-\begin{tabular}{lrrrrrrlll}
-\hline
- attr       &   event total &   event \# &   event \% &   volume total &   volume \# &   volume \% & prec   & recall   & f1   \\
-\hline
- acronym    &           250 &       240 &      96   &            250 &        250 &      100   & 0.43   & 0.43     & 0.43 \\
- city       &           250 &       200 &      80   &            250 &        234 &       93.6 & 0.78   & 0.74     & 0.75 \\
- country    &           250 &       186 &      74.4 &            250 &        234 &       93.6 &        &          &      \\
- end\_date   &           250 &       224 &      89.6 &            250 &        234 &       93.6 & 0.71   & 0.70     & 0.70 \\
- region     &           250 &       140 &      56   &            250 &         14 &        5.6 & 0.50   & 0.33     & 0.39 \\
- start\_date &           250 &       224 &      89.6 &            250 &        234 &       93.6 & 0.72   & 0.70     & 0.71 \\
- title      &           250 &       238 &      95.2 &            250 &        250 &      100   &        &          &      \\
- year       &           250 &       234 &      93.6 &            250 &        241 &       96.4 & 0.85   & 0.80     & 0.82 \\
-\hline
-\end{tabular}
-\caption{LLM based extraction of event attributes from homepages}
-\label{tab:homepage_attributes}
-\end{table}
 
 \subsection{Single Point of Truth against Wikidata validation}
 A major concern of the CEUR-WS editors and other stakeholders is the trustworthiness of the Wikidata entries. These entries are mostly created by the CEUR-WS Wikidata bot but also by other tools such as Scholia and individual Wikidata curators. 
@@ -889,7 +757,6 @@ The cross-linking with DBLP and k10plus has been performed and may now be contin
 
 Given that all four involved meta data sources -- CEUR-WS, Wikidata, DBLP and k10plus -- involve a lot of manual curation, data quality errors deriving from human errors still have to be mitigated with the goal to achieve a lower error rate than would be possible with manual efforts alone.
 
-SemPubFlow introduces a metadata-first approach to scientific publishing, aiming to align the publishing process more closely with the FAIR principles. Through the integration of Language Model Systems and Wikidata, the workflow addresses several challenges in scholarly publishing, particularly around the efficiency and quality of metadata management. This paper has outlined the core components and potential benefits of SemPubFlow, including its ability to facilitate a more structured and accessible digital scholarly ecosystem.
 
 \subsection{Future Work}
 \label{sec:future_work}
@@ -934,34 +801,6 @@ independently while cohesively contributing to the scholarly publishing
 ecosystem.
 
 \subsection{Acknowledgements}
-\label{sec:ack}
-Table~\ref{tab:tools} shows the main open source libraries being used by the work described.
-\begin{table}
-\centering
-\begin{tabular}{l l}
-\hline
-Link & URL \& Description \\
-\hline
-\href{https://pypi.org/project/beautifulsoup4/}{BeautifulSoup4} & \texttt{https://pypi.org/project/beautifulsoup4/} \\ & HTML and XML parsing library \\
-\href{https://github.com/LibreCat/Catmandu}{Catmandu} & \texttt{https://github.com/LibreCat/Catmandu} \\ & Data processing toolkit with e.g. MARC conversion \\
-\href{https://github.com/zauberzeug/nicegui/}{nicegui} & \texttt{https://github.com/zauberzeug/nicegui/} \\ & Web-based reactive UI development framework \\
-\href{https://github.com/justpy-org/justpy}{justpy} & \texttt{https://github.com/justpy-org/justpy} \\ & Python web framework for interactive apps \\
-\href{https://github.com/somnathrakshit/geograpy3}{geograpy3} & \texttt{https://github.com/somnathrakshit/geograpy3} \\ & Contextual place name extraction \\
-\href{https://github.com/WolfgangFahl/pyLoDStorage}{pyLoDstorage} & \texttt{https://github.com/WolfgangFahl/pyLoDStorage} \\ &  List of Dict (Table) Storage library  with named query support\\
-\href{https://github.com/maxlath/wikibase-cli}{wikibase-cli} & \texttt{https://github.com/maxlath/wikibase-cli} \\ & Command Line Interface for Wikibase instances \\
-\href{https://github.com/WolfgangFahl/py-yprinciple-gen}{py-yprinciple-gen} & \texttt{https://github.com/WolfgangFahl/py-yprinciple-gen} \\ & Generate artifacts from y-principled metadata \\
-\hline
-\end{tabular}
-\caption{List of Tools with Links, URLs, and Descriptions}
-\label{tab:tools}
-\end{table}
-
-Use of generative AI: the creation of parts of this work has been assisted by ChatGPT-4.
-
-\footnotelink{https://cr.bitplan.com/index.php/Category:ChatGPT}{ChatGPT Workdocumentations} documents some of the experiments. When creating software, ChatGPT has been extensively used, e.g., for implementing the \footnotelink{https://github.com/WolfgangFahl/pyCEURmake/blob/main/ceurws/urn.py}{URN check digit calculator}. 
-
-Also, \LaTeX syntax generation has been done with ChatGPT e.g. converting tables and lists to proper format as well as grammar and spell checks. 
-%The structure of table~\ref{tab:ScientificEventLifecycle}, Figure \ref{fig:howtoworkflow} have been extracted from the 
 
 We would like to thank Jakob Voß for helping with the k10plus matching and creating the Wikidata property \wdp{colocated with}{P11633} in due time.
 
