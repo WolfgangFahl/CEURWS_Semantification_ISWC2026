@@ -84,7 +84,7 @@ SIB Swiss Institute of Bioinformatics, Switzerland}
 \begin{document}
 \maketitle
 \begin{abstract}
-The CEUR Workshop Proceedings (CEUR-WS) is a non profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the needed metadata to be used by indexers such as DBLP and german national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher with the goal to allow semantic handling with modern tools. 
+The CEUR Workshop Proceedings (CEUR-WS) is a non profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the needed metadata to be used by indexers such as DBLP and german national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher with the goal to allow semantic handling and querying with modern tools. 
 
 In this work we show how the semantification is in progress and Wikidata has been used as the core target infrastructure to overcome the obstacles that the change in workflow has been struggling with since the 2015 Sempub challenge.
 
@@ -98,7 +98,8 @@ In this work we show how the semantification is in progress and Wikidata has bee
     \caption{Most relevant entities for scientific publishing}
      \label{fig:core_entities}
 \end{figure}
-Traditional publishing workflows often involve redundant and manual curation of metadata for the most relevant entities (see Figure~\ref{fig:core_entities}) at various stages in the lifecycle of an event, each leaving distinct digital traces. Therefore, the metadata is not readily available for applying state-of-the-art Findable, Accessible, Interoperable, and Reusable (FAIR) ~\ref{sec:FAIR}, Single Point of Truth (SPoT), and Single Source of Truth (SSoT) principles. This work shows how the HTML/PDF SSoT of CEUR-WS at the ceur-ws.org domain (SPoT) has been used to create a Knowledge Graph representation of the relevant entities in Wikidata.
+
+The Traditional publishing workflows handle the metadata of the needed core entities (as shown in Figure~\ref{fig:core_entities}) in an unFAIR way. Findable, Accessible, Interoperable, and Reusable (FAIR) ~\ref{sec:FAIR}, Single Point of Truth (SPoT), and Single Source of Truth (SSoT) principles are having low priority. Therefore the opportunities to collect the metadata during the different lifcecyle stages of an event as shown in table \ref{tab:ScientificEventLifecycle} are missed. For the future of CEUR-WS publishing we envision a metadata first publishing approach. This work shows how the HTML/PDF SSoT of CEUR-WS at the ceur-ws.org domain (SPoT) has been used to create a Knowledge Graph representation of the relevant entities in Wikidata between 2022 and 2026 as a step in this direction.
 
 
 \begin{table}
@@ -131,13 +132,13 @@ Moving the responsibility for curating data for relevant entities (see Figure~\r
 Scientific communication increasingly relies on the use of knowledge graphs, as exemplified by \footnotelink{https://scholar.google.com/}{Google Scholar} and the evolution of Microsoft Academic Graph~\cite{Wang2020} into OpenAlex~\cite{Priem2022}. Legacy systems based on technologies such as MARC~\cite{Ganseman2015}, PICA~\cite{Costers1997}  or XML are also adapting, highlighted by DBLP's adoption of RDF/SPARQL, with the  \footnotelink{https://qlever.cs.uni-freiburg.de/dblp}{QLever DBLP SPARQL endpoint}~\cite{Bast2017} being the most up-to-date.
 
 \subsection{CEUR Workshop Proceedings}
-The CEUR Workshop Proceedings (CEUR-WS) publishing platform (https://ceur-ws.org/) were introduced in 1995 as a means of publishing proceedings of scientific workshops (and smaller conferences) in computer science. 
+The CEUR Workshop Proceedings (CEUR-WS) publishing platform (https://ceur-ws.org/) was introduced in 1995 as a means of publishing proceedings of scientific workshops (and smaller conferences) in computer science. 
 
-CEUR-WS offers a free online service that provides open access to  the published proceedings hosted by RWTH Aachen University's Chair for Information Systems and Databases. CEUR-WS is operated by the CEUR-WS Editors -- a team of unpaid volunteers -- working as a de facto non-profit organization. 3,600 Volumes containing over 66,500 PDF documents have been published in total until December 2023.
+CEUR-WS offers a free online service that provides open access to the published proceedings originally hosted by RWTH Aachen University's Chair for Information Systems and Databases and now moved to Gesellschaft for Informatik in 2026. CEUR-WS is operated by the CEUR-WS Editors -- a team of unpaid volunteers -- working as a de facto non-profit organization. More than 4,200 Volumes containing over 90,000 PDF documents have been published in total until 2026.
 
 Technically, all data and metadata of the proceedings are directly represented using HTML, PDF and a filesystem directory hierarchy, and delivered via the HTTP and FTP protocols. 
 
-CEUR-WS does not use a Content Management System for publishing but relies on pure HTML and PDF for rendering its \footnotelink{https://ceur-ws.org}{public website}. The metadata for these publications is only indirectly available through indexing services such as dblp~\cite{Ley2009} and {K10plus}\cite{k10plus2019}\footnote{\url{https://dblp.org/}, \url{https://opac.k10plus.de}}. Unfortunately both DBLP and k10plus do not have a complete set of metadata records for all volumes as of December 2023 and in both cases there is a delay of some weeks/months before new volumes are picked up for indexing.
+CEUR-WS does not use a Content Management System for publishing but relies on pure HTML and PDF for rendering its \footnotelink{https://ceur-ws.org}{public website}. The metadata for these publications is only indirectly available through indexing services such as dblp~\cite{Ley2009} and {K10plus}\cite{k10plus2019}\footnote{\url{https://dblp.org/}, \url{https://opac.k10plus.de}}. Unfortunately both DBLP and k10plus do not have a complete set of metadata records for all volumes as of April 2026 and in both cases there is a delay of some weeks/months before new volumes are picked up for indexing.
 
 There have been multiple attempts in the past to make the metadata of the CEUR-WS platform available for computer based analysis and querying. None of these attempts has been consistent and continuous so far – the CEUR-WS editors workflow still directly creates the HTML artifacts and still ask authors and proceeding editors to work this way as described in the CEUR-WS “how to submit” guide~\cite{CEURHowtoSubmit}.
 
@@ -220,7 +221,7 @@ Both the HTML and PDF encoding of the original scientific content are structured
      \label{fig:digital_publishing}
 \end{figure}
 
-The metadata needed for creating the knowledge graph is only available in natural language/text form and follows rules that have been changed multiple times during the history of CEUR-WS. From 2013 to 2023, there have been 33 different versions of the index file template with no proper tracing of what was changed from version to version. The index and volume HTML files were often edited manually, leading to minor, undocumented differences even within these versions. The usage of the different page versions follows a long-tail Zipfian distribution with 5 versions covering 60\% of all volumes. 
+The metadata needed for creating the knowledge graph is only available in natural language/text form and follows rules that have been changed multiple times during the history of CEUR-WS. From 2013 to 2026, there have been 33 different versions of the index file template with no proper tracing of what was changed from version to version. The index and volume HTML files were often edited manually, leading to minor, undocumented differences even within these versions. The usage of the different page versions follows a long-tail Zipfian distribution with 5 versions covering 60\% of all volumes. 
 
 % https://cr.bitplan.com/index.php/CEUR-WS_Versions
 \subsection{Contributions of this Paper}
