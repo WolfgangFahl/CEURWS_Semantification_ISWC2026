@@ -84,9 +84,10 @@ SIB Swiss Institute of Bioinformatics, Switzerland}
 \begin{document}
 \maketitle
 \begin{abstract}
-The CEUR Workshop Proceedings (CEUR-WS) is a non profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the needed metadata to be used by indexers such as DBLP and german national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher with the goal to allow semantic handling and querying with modern tools. 
+CEUR Workshop Proceedings (CEUR-WS) is a non-profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single point of truth for the metadata required by indexers such as DBLP and the German national library DNB. Scholars have long craved for persistent identifiers for the core entities involved:  event series, event, proceedings, paper, editor, author, institution and publisher, with the goal to allow semantic handling and querying with modern tools. 
 
-In this work we show how the semantification is in progress and Wikidata has been used as the core target infrastructure to overcome the obstacles that the change in workflow has been struggling with since the 2015 Sempub challenge.
+In this work we show how we enabled the semantification using Wikidata as the core target infrastructure to overcome the obstacles that the change in workflow has been struggling with since the 2015 Semantic Publishing Challenge.
+We further point out the challenges of aligning the digital, social and physical aspects of this transformation and outline a roadmap …
 
 \end{abstract}
 \keywords{Knowledge Graph \and Linked Data \and Metadata Extraction \and Publishing \and Semantic Web \and Wikidata}
@@ -132,73 +133,26 @@ Moving the responsibility for curating data for relevant entities (see Figure~\r
 Scientific communication increasingly relies on the use of knowledge graphs, as exemplified by \footnotelink{https://scholar.google.com/}{Google Scholar} and the evolution of Microsoft Academic Graph~\cite{Wang2020} into OpenAlex~\cite{Priem2022}. Legacy systems based on technologies such as MARC~\cite{Ganseman2015}, PICA~\cite{Costers1997}  or XML are also adapting, highlighted by DBLP's adoption of RDF/SPARQL, with the  \footnotelink{https://qlever.cs.uni-freiburg.de/dblp}{QLever DBLP SPARQL endpoint}~\cite{Bast2017} being the most up-to-date.
 
 \subsection{CEUR Workshop Proceedings}
-The CEUR Workshop Proceedings (CEUR-WS) publishing platform (https://ceur-ws.org/) was introduced in 1995 as a means of publishing proceedings of scientific workshops (and smaller conferences) in computer science. 
+Since 1995 CEUR Workshop Proceedings (CEUR-WS) (https://ceur-ws.org/) has published more than 4,200 Volumes and over 90.000 papers as a free online service for publishing proceedings of scientific workshops (and smaller conferences) in computer science, operated by at team of unpaid volunteers.
 
-CEUR-WS offers a free online service that provides open access to the published proceedings originally hosted by RWTH Aachen University's Chair for Information Systems and Databases and now moved to Gesellschaft for Informatik in 2026. CEUR-WS is operated by the CEUR-WS Editors -- a team of unpaid volunteers -- working as a de facto non-profit organization. More than 4,200 Volumes containing over 90,000 PDF documents have been published in total until 2026.
+Technically, all data and metadata of the proceedings are directly represented as a static website using HTML, PDF and HTTP and FTP protocols as provided by the workshop editors along the CEUR-WS “how to submit” guide~\cite{CEURHowtoSubmit}. 
 
-Technically, all data and metadata of the proceedings are directly represented using HTML, PDF and a filesystem directory hierarchy, and delivered via the HTTP and FTP protocols. 
+The metadata is available after some delay of weeks or month through indexing services such as dblp~\cite{Ley2009} and {K10plus}\cite{k10plus2019}\footnote{\url{https://dblp.org/}, \url{https://opac.k10plus.de}} and at the archive of the TIB \url{https://www.tib.eu/}. 
 
-CEUR-WS does not use a Content Management System for publishing but relies on pure HTML and PDF for rendering its \footnotelink{https://ceur-ws.org}{public website}. The metadata for these publications is only indirectly available through indexing services such as dblp~\cite{Ley2009} and {K10plus}\cite{k10plus2019}\footnote{\url{https://dblp.org/}, \url{https://opac.k10plus.de}}. Unfortunately both DBLP and k10plus do not have a complete set of metadata records for all volumes as of April 2026 and in both cases there is a delay of some weeks/months before new volumes are picked up for indexing.
+After multiple unfinished attempts to make the metadata of the CEUR-WS platform available for semantic analysis and querying we report on the successful use of wikidata and scholia as the knowledge graph platform to provide FAIR metadata.
 
-There have been multiple attempts in the past to make the metadata of the CEUR-WS platform available for computer based analysis and querying. None of these attempts has been consistent and continuous so far – the CEUR-WS editors workflow still directly creates the HTML artifacts and still ask authors and proceeding editors to work this way as described in the CEUR-WS “how to submit” guide~\cite{CEURHowtoSubmit}.
+Doing so was harder than one would expect - the devil is in the details.
 
-This work reports on the successful start of the semantification of CEUR-WS with Wikidata as a target knowledge graph with the goal to achieve consistency and continuity for the future. 
-
-The challenge was in handling the textual natural language description parts of the CEUR-WS content that is inherently still part of the semi-digitized approach of using HTML and PDF. We propose to have a better separation of concerns of metadata, display and storage and started implementing it.
-
-\subsection{The Trend towards FAIR Data and Open Science: Semantification}\label{sec:FAIR}
+\subsection{Making CEUR-WS FAIR}\label{sec:FAIR}
 % FAIR Data Introduction - why is this relevant? EOSC, NFDI, Open Access, Open Science
 % FAIR Data as a basis for Knowledge Graphs
-Since their inception, the FAIR principles~\cite{GOFAIR2019,Wilkinson2016} have been a  success. They have been adopted by various industries (e.g., the pharmaceutical industry) and national and international projects (e.g., the Common European Dataspaces). 
-Persistent Identifiers (PIDs) and rich metadata are the core components of the FAIR principles, and they provide the means to create Knowledge Graphs~\cite{Cousijn2021}.
+The FAIR principles~\cite{GOFAIR2019,Wilkinson2016} with Persistent Identifiers (PIDs) and rich metadata as core components are being adopted by an increasing number of publishing organizations.  
 
-Representing digital traces of scholarly communication in Knowledge Graphs (KGs)~\cite{Hogan_2021} is useful for supporting use cases such as literature search and recommendation of events for attendance or publishing. The metadata of the most relevant entities as outlined in Figure~\ref{fig:core_entities}\footnote{The original SVG (see \texttt{http://cr.bitplan.com}) has clickable links to the Wikidata properties and entity types} need to be made available to offer such a knowledge graph. The the entities at the core of this work are depicted in bold and blue.
-
-
-The term \tquote{Semantic Web}~\cite{BernersLee2001} has been coined by Tim-Berners Lee et al.\ to describe the effect of resources on the Web interlinked making use of such metadata.
-Therefore \tquote{Semantification} was chosen as the title of the project and this paper to describe the process of creating a Knowledge Graph and making the results available in a Semantic Web fashion. The Semantification of CEUR-WS has been attempted multiple times in the past~\cite{Lange2014,Sateli2015} -- always under the assumption that a self-maintained RDF/SPARQL endpoint would be the goal to achieve. The results have not been consistent and durable since the publishing workflow has not been adapted and the single point of truth for the metadata is still buried in the HTML/PDF documents often in pure text sections. The fear of maintenance follow-up problems, given that CEUR-WS is a non-profit service with no budget, was a major obstacle. 
-
-\subsection{Challenges in making CEUR-WS more FAIR via Semantification}\label{sec:fair_challenges}
-
-To semantify CEUR-WS, the following requirements were most relevant:
-\begin{itemize}
-    \item the metadata should follow the FAIR~\cite{GOFAIR2019,Wilkinson2016} principles 
-    \begin{itemize}
-    \item \textbf{Findable}
-    \begin{itemize}
-        \item F1: (Meta)data are assigned globally unique and persistent identifiers (PIDs) (see Section~\ref{sec:event_pids}).
-        \item F2: Data are described with rich metadata.
-        \item F3: Metadata clearly and explicitly include the identifier of the data they describe.
-        \item F4: (Meta)data are registered or indexed in a searchable resource.
-    \end{itemize}
-    \item \textbf{Accessible}
-    \begin{itemize}
-        \item A1: (Meta)data are retrievable by their identifier using a standardised communications protocol
-        \item A1.1: The protocol is open, free, and universally implementable
-        \item A1.2: The protocol allows for an authentication and authorisation procedure, where necessary
-        \item A2: Metadata should be accessible even when the data is no longer available
-    \end{itemize}
-    \item \textbf{Interoperable}
-    \begin{itemize}
-        \item I1: (Meta)data use a formal, accessible, shared, and broadly applicable language for knowledge representation.
-        \item I2: (Meta)data use vocabularies that follow FAIR principles
-        \item I3: (Meta)data include qualified references to other (meta)data
-    \end{itemize}
-    \item \textbf{Reusable}
-    \begin{itemize}
-        \item R1: (Meta)data are richly described with a plurality of accurate and relevant attributes
-        \item R1.1: (Meta)data are released with a clear and accessible data usage license
-        \item R1.2: (Meta)data are associated with detailed provenance
-        \item R1.3: (Meta)data meet domain-relevant community standards
-    \end{itemize}
-\end{itemize}
-
-    \item relevant queries should be supported, as derived from the original set of queries of the 2014 Semantic publishing challenge as outlined in Section~\ref{sec:sempub_challenge}
-    \item the metadata should reuse an established ontology
-    \item the manual and automatic curation of entries should be possible with public access for all stakeholders, e.g., editors, authors, organizers, publishers, indexers
-    \item the infrastructure should be stable and there should be sufficient trust in its long term availability
-    \item an open source non-profit infrastructure is preferred since this is also the mode of operation of CEUR-WS
-\end{itemize}
+To make CEUR-WS metadata fair a set of relevant queries should be supported, as derived from the original set of queries of the 2014 Semantic publishing challenge as outlined in Section~\ref{sec:sempub_challenge}.
+The metadata should be provided following an ontology that is based on established ontologies.
+The manual and automatic curation of entries should be possible with public access for all stakeholders, e.g., editors, authors, organizers, publishers and indexers.
+The infrastructure should be stable and there should be sufficient trust in its long term availability
+An open source non-profit infrastructure is preferred since this is also the mode of operation of CEUR-WS
 
 Given the HTML/PDF/text input of CEUR-WS, the corresponding Knowledge Graph needs to be created and the single-point-of-truth computer readable metadata be separated from the different representations such as HTML so that the above requirements are fulfilled. 
 
@@ -227,42 +181,33 @@ The metadata needed for creating the knowledge graph is only available in natura
 \subsection{Contributions of this Paper}
 The core contributions presented in this work are:
 \begin{enumerate}
-    \item To provide the tools, infrastructure and approaches to modify the CEUR-WS publication workflow to consistently supply high quality FAIR metadata (Semantification). Tools such as CEUR-WS Volume Browser, Semantic MediaWiki, and Single Point of Truth Server are detailed in section~\ref{sec:implementations_and_demos}. 
+    \item To provide the tools, infrastructure and approaches to modify the CEUR-WS publication workflow to consistently supply high quality FAIR metadata (Semantification) as detailed in section~\ref{sec:implementations_and_demos}. 
 
-    \item Splitting the metadata for the three main entities Event, Event Series and Proceedings as a major step towards improving the metadata quality, e.g., by allowing event series data to be checked for completeness and be completed from different sources where possible. Unfortunately, currently none of the stakeholders have shown enough motivation to do this completion, while it is valuable, e.g., for assessing the quality of an event series. The necessary change of perspective to convince the stakeholders is a chicken-egg problem, which the CEUR-WS semantification will help to facilitate. 
+    \item Splitting the metadata for the three main entities Event, Event Series and Proceedings as a major step towards improving the metadata quality and FAIRness.
 
-    \item Providing a bootstrapping~\cite{Bardini2001,Engelbart2007} approach to get rid of manual editing of the CEUR-WS website content and instead using a CMS approach based on the single-point-of-truth metadata that separates the concerns of storage and display. Making sure the results are already visible and usable during the ongoing CEUR-WS semantification transition project.
+    \item Providing a bootstrapping~\cite{Bardini2001,Engelbart2007} approach to shift the single point of truth from the current HTML/PDF files to a RDF ready ontology based format.
     
 \end{enumerate}
 
-These contributions, while initially tailored for CEUR-WS have potential applicability to other publishing use cases see section ~\ref{sec:future_work}.
+These contributions are valuable for other publishing use cases see section ~\ref{sec:future_work}.
 
 \section{Related Work}\label{sec:Related Work}
 %BrylEtAl
 \subsection{Semantic Publishing challenge}\label{sec:sempub_challenge}
-The Semantification of CEUR-WS has been publicly pursued in the Semantic Publishing challenge~\cite{Lange2014} between 2014 and 2016. From an excerpt of the CEUR-WS content, participants were asked to extract an RDF knowledge graph to allow for a set of 20 queries to be answered.
+Representing digital traces of scholarly communication in Knowledge Graphs (KGs) ~\cite{Cousijn2021}, ~\cite{Hogan_2021} is useful for supporting use cases such as literature search and recommendation of events for attendance or publishing. Following the  \tquote{Semantic Web}~\cite{BernersLee2001} approach the Semantification of CEUR-WS has been publicly pursued in the Semantic Publishing challenge~\cite{Lange2014,Sateli2015}. Participants were asked to extract an RDF knowledge graph to be able to answer a set of 20 challenge queries.
 
-% https://ceur-ws.bitplan.com/index.php/Vol-3184/paper7
-% https://github.com/angelobo/SemPubEvaluator
-One \footnotelink{https://github.com/ceurws/lod/wiki/SemPub2015}{original task of the Semantic Publishing Challenge (SemPub2015)} was defined as follows:
-\textit{Task 1: Extraction and assessment of workshop proceedings information.
-Participants are required to extract information from a set of HTML tables of contents, partly including microformat and RDFa annotations but not necessarily being valid HTML, of selected computer science workshop proceedings published with the CEUR-WS.org open access service. The extracted information is expected to answer queries about the quality of these workshops, \dots}. 
-
-Kolchin et al.~\cite{Kolchin2014,Kolchin2015} have submitted results to the challenge twice with an approach using XPath Queries on the HTML DOM markup and converted the results directly to RDF triples; see their \footnotelink{https://github.com/ailabitmo/ceur-ws-lod}{ceur-ws-lod repository on GitHub}. 
+Kolchin et al.~\cite{Kolchin2014,Kolchin2015} have submitted an approach using XPath Queries on the HTML DOM markup and converted the results directly to RDF triples; see  \footnotelink{https://github.com/ailabitmo/ceur-ws-lod}{ceur-ws-lod repository on GitHub}. 
 The reusability of this approach is limited since the parsing and generation code are intermixed.
 
 Sateli and Witte~\cite{Sateli2015} applied the GATE framework~\cite{Cunningham_2001,Cunningham_2013} and a pipeline to create triples from the parsing result~\cite{Sateli2016}; see also \footnotelink{https://www.semanticsoftware.info/sempub-challenge-2015}{their supplementary material}. 
 
 The 2015 work of Milicka and Burget~\cite{Milicka2015} used \footnotelink{https://github.com/FitLayout/ToolsEswc/tree/master/awk}{awk text pattern matching} as a tool to parse the table of contents files per volume.
 
-The objective of these attempts was to create a local knowledge graph as a point of truth, which the required queries were executed against.
-
 Tasks 2 and 3 called for the detailed analysis of the PDF papers.
 
-All challenge contributions had a purely scientific focus.
+All challenge contributions had a purely scientific focus and therefore they would not have been fit for making the results operational and being used in the actual CEUR-WS publishing workflow, as doing so would have made it mandatory to operate and maintain the necessary local  self-maintained RDF/SPARQL endpoint to provide a knowledge graph as a point of truth.
 
-Without further effort, they would not have been fit for making the results operational and being used in the actual CEUR-WS publishing workflow, as doing so would have made it mandatory to operate and maintain the necessary infrastructure.
-For lack of resources (human as well as hardware), the CEUR-WS team did not make this effort.
+For lack of resources (human as well as hardware), and limited trust in the long term stability of such approaches the CEUR-WS team did not make the effort.
 
 \subsection{Persistent Identifiers in a scholarly publishing context}\label{sec:event_pids}
 A study about Linked Data~\cite{Kafer2013} found that each year about 10\% of Linked Data URIs become no longer dereferencable.
@@ -282,17 +227,7 @@ Introducing PIDs in the form of DOIs to CEUR-WS brings up the follow-up problem 
 
 \subsection{Metadata Extraction from PDF, HTML and Text} 
 
-As part of the \footnotelink{https://github.com/WDscholia/scholia/issues/1438}{Scholia Open Source Project}, Nielsen~\cite{Nielsen2017} created a scraper tool capable of creating QuickStatements~\cite{Manske2016} output; see \footnotelink{https://github.com/WDscholia/scholia/blob/master/scholia/scrape/ceurws.py}{scrape/ceurws.py}. Using the scrape/QuickStatements chain enables the creation of Wikidata entries for each paper. The \footnotelink{https://www.wikidata.org/wiki/Q117040467}{Vol-3184/paper4} Wikidata entry has been created this way by us to demonstrate the effect. In this early automation attempt, we used the \wdp{author name string}{P2093} property, instead of immediately doing the disambiguate step for the author strings as explained in the following.
-
-Figure~\ref{fig:author_name_string} shows the difference in using the \wdp{author}{P50} property. The author “Axel Polleres” already has a Wikidata entry, which is linked/clickable and all the further information of this author is available. “Gerhard Klager” is mentioned by name, which is a significant difference since the disambiguation of such entries is a major effort. In Section~\ref{sec:metadata_first}, we propose making the use of persistent identifiers and the immediate creation of Wikidata entries for scholars mandatory to mitigate this problem.
-
-\begin{figure}
-    \centering
-    %\includesvg[width=\linewidth]{images/HowToWorkflow.svg}
-     \includegraphics[scale=0.33]{images/author_name_string.png}
-    \caption{author name string versus author property}
-     \label{fig:author_name_string}
-\end{figure}
+As part of the \footnotelink{https://github.com/WDscholia/scholia/issues/1438}{Scholia Open Source Project}, Nielsen~\cite{Nielsen2017} created a scraper tool capable of creating QuickStatements~\cite{Manske2016} output; see \footnotelink{https://github.com/WDscholia/scholia/blob/master/scholia/scrape/ceurws.py}{scrape/ceurws.py}. Using the scrape/QuickStatements chain enables the creation of Wikidata entries for each paper. The \footnotelink{https://www.wikidata.org/wiki/Q117040467}{Vol-3184/paper4} Wikidata entry has been created this way by us to demonstrate the effect. 
 
 \footnotelink{http://ptp.bitplan.com}{Proceedings Title Parser}~\cite{Fahl2022} 
 has a CEUR-WS parsing mode, which already had the RDFa extractor capability (allowing to cover more recent CEUR-WS volumes using that markup style). Part of this work has been reused and extended to a fully fledged parser in the work we are reporting here.
@@ -615,9 +550,8 @@ Consent, Public Data, and Contractual Necessity are crucial for scholarly publis
 \section{Implementation and Demos}
 \label{sec:implementations_and_demos}
 
-\subsection{Open Source}
-The CEUR-WS semantification projects are open sourced via the repositories of the  
-\footnotelink{https://github.com/ceurws}{github ceurws organization}. 
+\subsection{Prototypes}
+
 
 
 A \footnotelink{http://ceur-ws.bitplan.com}{prototype for the presentation} of the CEUR-WS Semantification results has been created using Semantic MediaWiki~\cite{Kroetzsch2011} (SMW), which is using the same MediaWiki open source engine as Wikipedia. SMW has extensions for markup that is transforms subject-predicate-object statements to triples, which leads to a \tquote{Semantification} of the Wiki by making the triples available for query.
@@ -800,6 +734,9 @@ storage, content generation, and presentation, allowing each to evolve
 independently while cohesively contributing to the scholarly publishing 
 ecosystem.
 
+\subsection{Supplemental Material Statement} Source code for the prototypes and semantification tools is available via the repositories of the  
+\footnotelink{https://github.com/ceurws}{github ceurws organization}. 
+
 \subsection{Acknowledgements}
 
 We would like to thank Jakob Voß for helping with the k10plus matching and creating the Wikidata property \wdp{colocated with}{P11633} in due time.
@@ -809,6 +746,9 @@ Thomas Hoeren and Jonas Kuiter of ITM, Münster kindly gave hints for legal aspe
 This paper is dedicated to the memory of CEUR-WS board member Ralf Klamma $\dag$ January 2023.
 
 This research has been partly funded by a grant of the Deutsche Forschungsgemeinschaft (DFG). \footnote{\href{https://gepris.dfg.de/gepris/projekt/426477583}{ConfIDent project; see https://gepris.dfg.de/gepris/projekt/426477583}}
+
+\subsection{Declaration of use of Generative AI}
+
 
 % Bibliography
 \bibliographystyle{splncs04}
