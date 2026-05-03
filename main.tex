@@ -449,7 +449,9 @@ After that, there was a lively and productive discussion that lead to the clarif
 SemPubFlow represents a transformative approach in the lifecycle of
 scientific events as outlined in Table~\ref{tab:ScientificEventLifecycle}, advocating for early curation and integration of  publicly available machine-readable metadata separating the concerns of content and visualization.
 
-Traditionally the created artifacts are mostly intended for human consumption and therefore optimized in this respect. Table~\ref{tab:format_comparisons} shows the computer readability challenges of some of the most common formats which often need sophisticated natural language processing capabilities to be performed. A limiting factor is the lack of standardization and separation of concerns. With the advent of LLMs the options for processing these diverse sources of metadata are vastly improving---making it feasible to get computer readable results as early as possible.
+Traditionally the created artifacts are mostly intended for human consumption and therefore optimized in this respect. Table~\ref{tab:format_comparisons} shows the computer readability challenges of some of the most common formats which often need sophisticated natural language processing capabilities to be performed. A limiting factor is the lack of standardization and separation of concerns.
+With the advent of LLMs and agentic AI the options for processing these diverse sources of metadata are
+vastly improving---making it feasible to get computer readable results as early as possible.
 
 \begin{table}
 \centering
@@ -499,7 +501,8 @@ We propose to make the use of PIDs mandatory for publishing in CEUR-WS. Given th
 
 The Wikidata PID usage proposal calls for looking up or creating Wikidata entries for all relevant core entities as early as possible and linking these entries to the standard PIDs where applicable.
 
-In the workflow the existing entries will later be reusable for computer assisted lookups as part of the SemPubFlow tool see section \ref{sec:sempubflow_tool} and Scholia.
+In the workflow the existing entries will later be reusable for computer assisted lookups as
+part of the SemPubFlow tool see section \ref{sec:sempubflow_tool} and Scholia.
 
 Figure~\ref{fig:metadata_first_workflow} shows the proposed future
 workflow. Publication via CEUR-WS would ideally involve assigning the
@@ -520,23 +523,17 @@ Instead we propose to do smaller changes gradually. As a first step, the main in
 
 \subsection{Legal aspects of Publishing Personal Data of Scholars}
 \label{sec:legal}
-The proposed workflow calls for publishing personal data of authors and editors early in the life cycle of an event.
-
-This is perfectly legal under at least one of the following conditions:\footnote{Disclaimer: this is just a summary in layman's terms of legal analysis that was done as part of the CEUR-WS semantification project}
-
-\begin{enumerate}
-    \item \textbf{Consent:} Explicit consent from individuals for their data to be published – e.g., by signing an authors agreement.
-    \item \textbf{Legitimate Interests:} Publication serves legitimate interests that outweighs the individual's rights and freedoms. E.g., when the scholar is a person of public interest.
-    \item \textbf{Public Data:} Data has already been made public by the scholar.
-    \item \textbf{Scientific Research:} Processing is necessary for scientific research purposes as per Article 89 of the GDPR.
-    \item \textbf{Contractual Necessity:} Necessary for the performance of a contract with the scholar – e.g., publishing a paper in workshop proceedings and making the metadata available for indexing by Wikidata, dblp, libraries and other interested parties.
-    \item \textbf{Legal Obligation:} Necessary for compliance with a legal obligation. This would, e.g., be the case if the publication was done via a traditional print outlet and thus, by German law, a copy of the proceedings has to be made available to the German National Library. On indexing, the personal data records of authors will be created as part of the German National Library's legal commitment.
-    \item \textbf{Vital Interests:} Necessary to protect the vital interests of the scholar or another person. This category is more relevant to medical or emergency situations and rather unlikely to be applicable for the scholarly publication use case.
-    \item \textbf{Public Interest:} Necessary for performing a task carried out in the public interest or in the exercise of official authority. E.g., when an investigation by public  authorities is underway.
-\end{enumerate}
-
-Consent, Public Data, and Contractual Necessity are crucial for scholarly publishing. Considering the analogy with Legal Obligations applying to print outlets, we expect it to be feasible to convince scholars that publishing their necessary personal data is reasonable in digital contexts.
-
+The proposed workflow calls for publishing personal data of authors
+and editors early in the life cycle of an event. According to the legal advisors we asked
+this is legal since a combination of conditions (Art.\ 6 GDPR) is met:
+Explicit consent is given by the stakeholders (Art.\ 6(1)(a)), the legitimate interest of the
+stakeholders is pursued (Art.\ 6(1)(f)), the data might be public already, the processing is
+necessary for scientific research (Art.\ 6(1)(e), Art.\ 89). The strongest condition is that
+there might be a legal obligation (Art.\ 6(1)(c)) as would be the case if publishing via major
+print publishers that have to provide a copy of the proceedings to the German National Library
+according to German law.
+Consent, Public Data, and Contractual Necessity are crucial for
+scholarly publishing.
 \section{Implementation and Demos}
 \label{sec:implementations_and_demos}
 
@@ -701,17 +698,6 @@ The first phase shows the current state of the workflow in the prototype phase, 
 
 Mass creation, editing and disambiguation of relevant scholar entries in Wikidata has to be performed to make these entries available for lookup and reference by the SemPubFlow tool. We intend to build on the Scholia experience with this type of task.
 
-The LLM approach already proven successful for volume homepages needs to also be applied for the much larger data sets of author homepages. An interesting research question is how well the pre processing of PDF files with CERMINE and GROBID is helpful in getting extraction and disambiguation results for paper metadata and how that might influence the efficiency, cost and accuracy.
-
-Given the promising aspects of SemPubFlow, community feedback
-is essential for its iterative development to better meet
-the evolving needs of the academic ecosystem. Allowing the
-integration with other publishing outlets besides CEUR-WS
-will be a key success factor. Future enhancements will have to focus
-on increasing the automation and accuracy of metadata
-extraction and management, while ensuring the tools developed
-are accessible, user-friendly and well integrated with the publishing workflow.
-
 In promoting metadata-first publishing, a public infrastructure like
 Wikidata could be used to dynamically generate artifacts, including
 homepages, CfP webpages, emails, and marketing materials, thus
@@ -742,6 +728,6 @@ This research has been partly funded by a grant of the Deutsche Forschungsgemein
 
 % Bibliography
 \bibliographystyle{splncs04}
-\bibliography{ceuws-semantification}
+\bibliography{ceurws-semantification}
 
 \end{document}

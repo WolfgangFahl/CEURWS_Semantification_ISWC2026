@@ -28,8 +28,8 @@ Usage: scripts/tex2pdf [--build|--check|--install|--clean|--fonts|--font|--githu
 
 Options:
   --build            Build the PDF (default when no args are given)
-  --check            Check required tools and fonts
-  --install          Install TeX dependencies and base fonts
+  --check            Check required tools (pdflatex, bibtex, inkscape) and fonts
+  --install          Install TeX dependencies, Inkscape, and base fonts
   --fonts, --font    Install texlive-fonts-extra (additional fonts)
   --github           GitHub Actions mode - check timestamps, build if needed, and git add if changed.
   --clean            Remove build artifacts
@@ -70,7 +70,7 @@ check_dependencies() {
     action "Checking system requirements..."
 
     # Check binaries
-    for tool in pdflatex bibtex fc-list; do
+    for tool in pdflatex bibtex inkscape fc-list; do
         if command -v "$tool" &> /dev/null; then
             success "Tool found: $tool"
         else
@@ -98,8 +98,8 @@ install_dependencies() {
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS installation
         if command -v port &> /dev/null; then
-            action "Detected MacPorts. Installing TeXLive and Fonts..."
-            sudo port -N install texlive-latex texlive-latex-extra dejavu-fonts fontconfig
+            action "Detected MacPorts. Installing TeXLive, Inkscape and Fonts..."
+            sudo port -N install texlive-latex texlive-latex-extra inkscape dejavu-fonts fontconfig
 
             # --- MACPORTS FONT CONFIGURATION ---
             if [ -d "/opt/local/share/fonts" ]; then
@@ -123,7 +123,7 @@ EOF
             fi
         elif command -v brew &> /dev/null; then
             action "Detected Homebrew..."
-            brew install --cask mactex-no-gui font-dejavu
+            brew install --cask mactex-no-gui font-dejavu inkscape
             brew install texlive
         else
             error "No package manager found (MacPorts/Homebrew). Install manually."
@@ -132,7 +132,7 @@ EOF
         # Linux (Debian/Ubuntu)
         action "Detected Linux (apt)..."
         sudo apt-get update
-        sudo apt-get install -y texlive-latex texlive-latex-extra fonts-dejavu fonts-dejavu-extra fontconfig
+        sudo apt-get install -y texlive-latex texlive-latex-extra fonts-dejavu fonts-dejavu-extra fontconfig inkscape
         fc-cache -f -v
     fi
 
