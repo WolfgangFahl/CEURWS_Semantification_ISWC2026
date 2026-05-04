@@ -181,50 +181,34 @@ run_bibtex() {
     return $?
 }
 
-# Check build log for warnings/errors and display summary
+# Check the final pdflatex pass in the build log for issues
 check_build_log() {
+    if [ ! -f "$LOG_FILE" ]; then
+        return 0
+    fi
+
+    local final_pass_line
+    final_pass_line=$(grep -n "This is pdfTeX" "$LOG_FILE" | tail -1 | cut -d: -f1)
+    if [ -z "$final_pass_line" ]; then
+        return 0
+    fi
+
+    local final_pass
+    final_pass=$(sed -n "${final_pass_line},\$p" "$LOG_FILE")
     local issues=0
 
-    if [ ! -f "$LOG_FILE" ]; then
-        return $issues
-    fi
+    local n
+    n=$(echo "$final_pass" | grep -c "LaTeX Warning: Citation.*undefined" 2>/dev/null || true)
+    [ "$n" -gt 0 ] && { warn "$n undefined citation(s)"; issues=$((issues + 1)); }
 
-    # Extract last pdflatex pass output (from "Pass 3" marker to end)
-    local final_pass
-    final_pass=$(awk '/Pass 3 \(Final\)/{p=1} p' "$LOG_FILE")
+    n=$(echo "$final_pass" | grep -c "LaTeX Warning: Reference.*undefined" 2>/dev/null || true)
+    [ "$n" -gt 0 ] && { warn "$n undefined reference(s)"; issues=$((issues + 1)); }
 
-    # Count undefined citations in final pass
-    local undefined_citations
-    undefined_citations=$(echo "$final_pass" | grep -c "LaTeX Warning: Citation.*undefined" 2>/dev/null || true)
-    if [ "$undefined_citations" -gt 0 ]; then
-        warn "$undefined_citations undefined citation(s) — check .bib entries"
-        issues=$((issues + 1))
-    fi
+    n=$(echo "$final_pass" | grep -c "Package svg Error" 2>/dev/null || true)
+    [ "$n" -gt 0 ] && { warn "$n SVG conversion error(s)"; issues=$((issues + 1)); }
 
-    # Count undefined references in final pass
-    local undefined_refs
-    undefined_refs=$(echo "$final_pass" | grep -c "LaTeX Warning: Reference.*undefined" 2>/dev/null || true)
-    if [ "$undefined_refs" -gt 0 ]; then
-        warn "$undefined_refs undefined reference(s) — check \\label{} definitions"
-        issues=$((issues + 1))
-    fi
-
-    # SVG conversion errors (missing PDF/PDF_tex from Inkscape)
-    local svg_errors
-    svg_errors=$(grep -c "Package svg Error" "$LOG_FILE" 2>/dev/null || true)
-    if [ "$svg_errors" -gt 0 ]; then
-        warn "$svg_errors SVG conversion error(s) — ensure Inkscape is installed"
-        issues=$((issues + 1))
-    fi
-
-    # Hard errors (!)
-    local hard_errors
-    hard_errors=$(echo "$final_pass" | grep -c "^!" 2>/dev/null || true)
-    if [ "$hard_errors" -gt 0 ]; then
-        warn "$hard_errors hard error(s) in build log:"
-        echo "$final_pass" | grep "^!" | head -10
-        issues=$((issues + 1))
-    fi
+    n=$(echo "$final_pass" | grep -c "^!" 2>/dev/null || true)
+    [ "$n" -gt 0 ] && { warn "$n hard error(s):"; echo "$final_pass" | grep "^!" | head -10; issues=$((issues + 1)); }
 
     return $issues
 }
