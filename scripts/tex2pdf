@@ -167,6 +167,16 @@ install_fonts_extra() {
     success "Extra fonts installed."
 }
 
+# Run pdflatex without failing on warnings (set -e safe)
+run_pdflatex() {
+    local redirect_output="${1:-false}"
+    if [ "$redirect_output" = "true" ]; then
+        pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" > /dev/null || true
+    else
+        pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" || true
+    fi
+}
+
 # the core functionality
 build_pdf() {
     if [ ! -f "${MAIN_FILE}.tex" ]; then
@@ -180,7 +190,7 @@ build_pdf() {
 
     # 1. First Pass
     action ">> pdfLaTeX Pass 1..."
-    pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex"
+    run_pdflatex
 
     # 2. Bibtex
     if ls *.bib 1>/dev/null 2>&1; then
@@ -190,11 +200,11 @@ build_pdf() {
 
     # 3. Second Pass
     action ">> pdfLaTeX Pass 2..."
-    pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" > /dev/null
+    run_pdflatex true
 
     # 4. Final Pass
     action ">> pdfLaTeX Pass 3 (Final)..."
-    pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" > /dev/null
+    run_pdflatex true
 
     if [ -f "${MAIN_FILE}.pdf" ]; then
         success "Build successful: ${MAIN_FILE}.pdf"
