@@ -171,7 +171,7 @@ install_fonts_extra() {
 # Run pdflatex, logging output
 run_pdflatex() {
     local pass="$1"
-    pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" >> "$LOG_FILE" 2>&1
+    pdflatex -shell-escape -interaction=nonstopmode "${MAIN_FILE}.tex" >> "$LOG_FILE" 2>&1
     return $?
 }
 
@@ -181,13 +181,52 @@ run_bibtex() {
     return $?
 }
 
-# Show relevant errors from the log file
-show_log_errors() {
-    if [ -f "$LOG_FILE" ]; then
-        echo ""
-        warn "Build errors from $LOG_FILE:"
-        grep -E "^(!|.*Error|.*undefined)" "$LOG_FILE" | head -30
+# Check build log for warnings/errors and display summary
+check_build_log() {
+    local issues=0
+
+    if [ ! -f "$LOG_FILE" ]; then
+        return $issues
     fi
+
+    # Extract last pdflatex pass output (from "Pass 3" marker to end)
+    local final_pass
+    final_pass=$(awk '/Pass 3 \(Final\)/{p=1} p' "$LOG_FILE")
+
+    # Count undefined citations in final pass
+    local undefined_citations
+    undefined_citations=$(echo "$final_pass" | grep -c "LaTeX Warning: Citation.*undefined" 2>/dev/null || true)
+    if [ "$undefined_citations" -gt 0 ]; then
+        warn "$undefined_citations undefined citation(s) — check .bib entries"
+        issues=$((issues + 1))
+    fi
+
+    # Count undefined references in final pass
+    local undefined_refs
+    undefined_refs=$(echo "$final_pass" | grep -c "LaTeX Warning: Reference.*undefined" 2>/dev/null || true)
+    if [ "$undefined_refs" -gt 0 ]; then
+        warn "$undefined_refs undefined reference(s) — check \\label{} definitions"
+        issues=$((issues + 1))
+    fi
+
+    # SVG conversion errors (missing PDF/PDF_tex from Inkscape)
+    local svg_errors
+    svg_errors=$(grep -c "Package svg Error" "$LOG_FILE" 2>/dev/null || true)
+    if [ "$svg_errors" -gt 0 ]; then
+        warn "$svg_errors SVG conversion error(s) — ensure Inkscape is installed"
+        issues=$((issues + 1))
+    fi
+
+    # Hard errors (!)
+    local hard_errors
+    hard_errors=$(echo "$final_pass" | grep -c "^!" 2>/dev/null || true)
+    if [ "$hard_errors" -gt 0 ]; then
+        warn "$hard_errors hard error(s) in build log:"
+        echo "$final_pass" | grep "^!" | head -10
+        issues=$((issues + 1))
+    fi
+
+    return $issues
 }
 
 # the core functionality
@@ -221,10 +260,16 @@ build_pdf() {
     run_pdflatex 3 || true
 
     if [ -f "${MAIN_FILE}.pdf" ]; then
-        success "Build successful: ${MAIN_FILE}.pdf"
+        check_build_log
+        local issues=$?
+        if [ $issues -gt 0 ]; then
+            warn "Build completed with $issues issue(s) — see $LOG_FILE"
+        else
+            success "Build successful: ${MAIN_FILE}.pdf"
+        fi
     else
         error "Build failed. Check $LOG_FILE for details." 0
-        show_log_errors
+        check_build_log
         return 1
     fi
 }
