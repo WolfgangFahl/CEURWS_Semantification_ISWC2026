@@ -82,6 +82,7 @@ Fraunhofer FIT, Sankt Augustin, Germany \and
 SIB Swiss Institute of Bioinformatics, Switzerland}
 
 \begin{document}
+\authorrunning{Wolfgang Fahl et. al.}
 \maketitle
 \begin{abstract}
 CEUR Workshop Proceedings (CEUR-WS) has been a non-profit publisher for scientific workshop and conference proceedings since 1995. For more than 30 years it has used HTML and PDF as the single source of truth for the metadata required by indexers such as DBLP and the German national library DNB. Scholars have long craved persistent identifiers for the core entities involved: event series, events, proceedings, papers, editors, authors, institutions, and publishers, with the goal of allowing semantic handling and querying with modern tools.
@@ -291,7 +292,8 @@ The workflow is cyclic -- it starts with what has so far been the single point o
 The steps of the semantification workflow for CEUR-WS as depicted in Figure~\ref{fig:ceurmake_workflow} are explained in the following subsections.
 
 \subsection{Preprocessing}
-To extract the relevant markup elements, we created parsers for the index and volume HTML Files as part of the pyCEURMake project. These parsers handle the RDFa-like annotations that have been applied in newer CEUR-WS volumes as well as the special and exotic cases arising from the long tail follow-up problems of the different over 33 styles of HTML structure being used. The BeautifulSoup4 Python library is used for lenient HTML parsing as a basis.
+To extract the relevant markup elements, we created parsers
+for the index and volume HTML Files as part of the pyCEURMake project. These parsers handle the RDFa-like annotations that have been applied in newer CEUR-WS volumes as well as the special and exotic cases arising from the long tail follow-up problems of the different over 33 styles of HTML structure being used. The BeautifulSoup4 Python library is used for lenient HTML parsing as a basis.
 
 \subsection{Tokenization}
 
@@ -419,21 +421,7 @@ Similar enrichments are done for editors and authors to complete the records.
 Wikidata~\cite{Vrandecic2014} is a knowledge graph based on an RDF triple store that has been successfully used to gather and link metadata of scholarly communication artifacts~\cite{Nielsen2017}.
 
 In 2022, we decided to directly target Wikidata instead of trying to set up our own RDF/SPARQL endpoint, as outlined in Section~\ref{sec:sempub_challenge}.
-Wikidata is well suited to to handle the challenges listed in Section~\ref{sec:fair_challenges} as referenced below by priority:
-\begin{itemize}
-    \item \textbf{Unique Identifiers (F1)}: by assigning Q-Identifiers, such as Q5 for human.
-    \item \textbf{Rich, Identifiable Metadata (F2, F3)}: by being originally based on Wikipedia entries from multiple countries and using a very large community and bots to add current items.
-    \item \textbf{Searchable Data (F4)}: by providing a robust Wikidata Query Service .
-    \item \textbf{Curation and Accessibility (A1, A2, R1.2)}: by enabling community edits and offering multiple language support.
-    \item \textbf{Complex Queries Support (A1, I1, I2, I3)}: by facilitating sophisticated querying through a SPARQL endpoint which may be federated with other Linked Open Data endpoints.
-    \item \textbf{Ontology Reuse (I1, I2)}: by integrating and linking to external ontologies and databases and providing its own robust ontology curation process.
-    \item \textbf{Stability and Trust (R1.3)}: by ensuring stability and trust through Wikimedia Foundation governance and having mirrored data in for profit (e.g. google) and non profit organizations\footnote{e.g. RWTH Aachen i5 runs multiple copies of Wikidata!}.
-    \item \textbf{Open Source, Non-Profit (R1.1)}: by promoting an open-source, non-profit model with Wikimedia Foundation and community contributions.
-\end{itemize}
-
-
-
-
+Wikidata is well suited as a FAIR infrastructure.
 
 \subsection{Workshop colocated with conference}
 Most CEUR-WS Volumes are proceedings of workshops, whose majority is colocated with a conference. For this \tquote{colocation} relation there was no specific property in Wikidata when we started the semantification. Kolchin~\cite{Kolchin2015} had already pointed out that \tquote{BIBO doesn't have an `event is part of bigger event' semantics} in 2015, so the need was long known.
@@ -486,9 +474,10 @@ Other (PPT, Word, SVG, etc.) & Vary in readability; structure and semantics can 
 \subsection{Metadata first semantic publishing}
 \label{sec:metadata_first}
 
-A key goal of metadata first semantic publishing is the early use (and enforcement of this use) of persistent identifiers. Without such identifiers it is notoriously difficult to disambiguate the core entities involved in scholarly publishing.
+A key goal of metadata first semantic publishing is the early
+mandatory use of persistent identifiers for the entities to be linked.
 
-The following PIDs are already often in use but the enforcement of their use is lacking in CEUR-WS.
+The following PIDs are already often in use:
 \begin{itemize}
     \item \textbf{ORCID (Open Researcher and Contributor ID):} Identifier for individual researchers.
     \item \textbf{ROR (Research Organization Registry):} Identifier for research organization.
@@ -496,13 +485,6 @@ The following PIDs are already often in use but the enforcement of their use is 
     \item \textbf{DOI (Digital Object Identifier):} A general identifier for objects accessible on the internet – often used for scholarly papers.
 \end{itemize}
 
-
-We propose to make the use of PIDs mandatory for publishing in CEUR-WS. Given the existing index entries of CEUR-WS Volumes in DBLP and the German national library, the DBLP and GND identifiers are also candidates. For ORCIDs, RORs, DOIs there is active action required by the stakeholders to obtain these, and, in the case of DOIs, there is cost involved. Using Wikidata as the general PID Infrastructure is much more feasible since it offers a freely accessible, community-driven platform that PIDs for a wide range of entities. This approach aligns with the open and collaborative nature of scholarly communications and meets the requirements for easy integration, broad adoption, and maintenance. Using Wikidata Q-Identifiers as PIDs relies on the long term availability of Wikidata which is quite likely giving the support by a strong community and big commercial players such as google.
-
-The Wikidata PID usage proposal calls for looking up or creating Wikidata entries for all relevant core entities as early as possible and linking these entries to the standard PIDs where applicable.
-
-In the workflow the existing entries will later be reusable for computer assisted lookups as
-part of the SemPubFlow tool see section \ref{sec:sempubflow_tool} and Scholia.
 
 Figure~\ref{fig:metadata_first_workflow} shows the proposed future
 workflow. Publication via CEUR-WS would ideally involve assigning the
@@ -538,9 +520,6 @@ scholarly publishing.
 \label{sec:implementations_and_demos}
 
 \subsection{Prototypes}
-
-
-
 A \footnotelink{http://ceur-ws.bitplan.com}{prototype for the presentation} of the CEUR-WS Semantification results has been created using Semantic MediaWiki~\cite{Kroetzsch2011} (SMW), which is using the same MediaWiki open source engine as Wikipedia. SMW has extensions for markup that is transforms subject-predicate-object statements to triples, which leads to a \tquote{Semantification} of the Wiki by making the triples available for query.
 Like most SMW installations we are using the standard SQL based triplestore and ask queries and not RDF/SPARQL \cite{Fahl2020}.
 
@@ -714,6 +693,7 @@ ecosystem.
 \footnotelink{https://github.com/ceurws}{github ceurws organization}.
 
 \subsection{Acknowledgements}
+\label{sec:ack}
 
 We would like to thank Jakob Voß for helping with the k10plus matching and creating the Wikidata property \wdp{colocated with}{P11633} in due time.
 

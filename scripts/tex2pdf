@@ -4,6 +4,8 @@
 
 set -o pipefail  # Return value of a pipeline is the value of the last (failed) command
 
+# GLOBAL VARIABLES
+
 # name of the main tex file
 MAIN_FILE="main"
 # log file for pdflatex/bibtex output
@@ -13,6 +15,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # list of required fonts to check (optional for pdfLaTeX, but kept for consistency)
 REQUIRED_FONTS=("DejaVu Sans" "DejaVu Serif")
+
+# COUNTER
+issues=0
 
 # Logic to source bash_messages
 if [ -f "$SCRIPT_DIR/bash_messages" ]; then
@@ -169,9 +174,10 @@ install_fonts_extra() {
 }
 
 # Run pdflatex, logging output
+# $1: pass
 run_pdflatex() {
     local pass="$1"
-    pdflatex -shell-escape -interaction=nonstopmode "${MAIN_FILE}.tex" >> "$LOG_FILE" 2>&1
+    pdflatex -shell-escape -interaction=nonstopmode "${MAIN_FILE}.tex" >> "${LOG_FILE}${pass}" 2>&1
     return $?
 }
 
@@ -181,36 +187,45 @@ run_bibtex() {
     return $?
 }
 
+# grep for the given search expression in the given log text
+# $1: log text
+# $2: the search text
+# $3: the title of this search
+#
+# return the number of items found
+grep_log() {
+  local log="$1"
+  local search="$2"
+  local title="$3"
+  echo "$log" | grep "$search" 
+  local n
+  n=$(echo "$log" | grep -c "$search" 2>/dev/null || true)
+  [ "$n" -gt 0 ] && { warn "$n $title"; issues=$((issues + 1)); }
+}
+
+
 # Check the final pdflatex pass in the build log for issues
+# $1: log_file
 check_build_log() {
-    if [ ! -f "$LOG_FILE" ]; then
-        return 0
-    fi
+  local log_file="$1"
+  if [ ! -f "$log_file" ]; then
+      return 0
+  fi
 
-    local final_pass_line
-    final_pass_line=$(grep -n "This is pdfTeX" "$LOG_FILE" | tail -1 | cut -d: -f1)
-    if [ -z "$final_pass_line" ]; then
-        return 0
-    fi
+  local final_pass_line
+  final_pass_line=$(grep -n "This is pdfTeX" "$log_file" | tail -1 | cut -d: -f1)
+  if [ -z "$final_pass_line" ]; then
+      return 0
+  fi
 
-    local final_pass
-    final_pass=$(sed -n "${final_pass_line},\$p" "$LOG_FILE")
-    local issues=0
+  local final_pass
+  final_pass=$(sed -n "${final_pass_line},\$p" "$log_file")
 
-    local n
-    n=$(echo "$final_pass" | grep -c "LaTeX Warning: Citation.*undefined" 2>/dev/null || true)
-    [ "$n" -gt 0 ] && { warn "$n undefined citation(s)"; issues=$((issues + 1)); }
-
-    n=$(echo "$final_pass" | grep -c "LaTeX Warning: Reference.*undefined" 2>/dev/null || true)
-    [ "$n" -gt 0 ] && { warn "$n undefined reference(s)"; issues=$((issues + 1)); }
-
-    n=$(echo "$final_pass" | grep -c "Package svg Error" 2>/dev/null || true)
-    [ "$n" -gt 0 ] && { warn "$n SVG conversion error(s)"; issues=$((issues + 1)); }
-
-    n=$(echo "$final_pass" | grep -c "^!" 2>/dev/null || true)
-    [ "$n" -gt 0 ] && { warn "$n hard error(s):"; echo "$final_pass" | grep "^!" | head -10; issues=$((issues + 1)); }
-
-    return $issues
+  grep_log "$final_pass" "LaTeX Warning: Citation.*undefined" "undefined citation(s)"
+  grep_log "$final_pass" "LaTeX Warning: Reference.*undefined" "undefined reference(s)"
+  grep_log "$final_pass" "Package svg Error" "SVG conversion error(s)"
+  grep_log "$final_pass" "^!" "hard error(s):"
+  return $issues
 }
 
 # the core functionality
@@ -242,17 +257,17 @@ build_pdf() {
     # 4. Final Pass
     action ">> pdfLaTeX Pass 3 (Final)..."
     run_pdflatex 3 || true
-
+    # log file is the one from pass 3
+    local log_file=${LOG_FILE}3
     if [ -f "${MAIN_FILE}.pdf" ]; then
-        check_build_log
-        local issues=$?
+        check_build_log $log_file
         if [ $issues -gt 0 ]; then
-            warn "Build completed with $issues issue(s) — see $LOG_FILE"
+            warn "Build completed with $issues issue(s) — see $log_file"
         else
             success "Build successful: ${MAIN_FILE}.pdf"
         fi
     else
-        error "Build failed. Check $LOG_FILE for details." 0
+        error "Build failed. Check $log_file for details." 0
         check_build_log
         return 1
     fi
