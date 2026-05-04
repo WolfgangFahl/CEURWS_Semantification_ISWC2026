@@ -12,6 +12,9 @@
 *.fdb_latexmk
 *.synctex.gz
 missfont.log
+*.log*
+_minted
+svg-inkscape
 
 # OS files
 .DS_Store
