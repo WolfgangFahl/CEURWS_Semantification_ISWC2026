@@ -1,0 +1,99 @@
+/**
+ * Wolfgang Fahl 2022-05-11
+ * 2026-04-29 Publisher added - entity names in uppercase
+ *
+ * Entities and Properties
+ */
+digraph links {
+   rankdir = RL;
+   graph [fontname = "helvetica"];
+   node [fontname = "helvetica"];
+   edge [fontname = "helvetica"];
+   scholar [
+       label="Scholar"
+       shape="box"
+       href="https://www.wikidata.org/wiki/Q5"
+   ]
+   institution [
+      label="Institution"
+      shape="box"
+      href="https://www.wikidata.org/wiki/Q4671277"
+   ]
+   publisher [
+     label="Publisher"
+     shape="box"
+     href="https://www.wikidata.org/wiki/Q96888669"
+   ]
+   paper [
+     label="Paper"
+     shape="box"
+     href="https://www.wikidata.org/wiki/Q13442814"
+   ]
+   proceedings [
+     label=Proceedings
+     color="blue"
+     fontcolor="blue"
+     shape="box"
+     style="bold"
+     href="https://www.wikidata.org/wiki/Q1143604"
+   ]
+   proceedings -> publisher [
+      label="publisher"
+      href=" https://www.wikidata.org/wiki/Property:P123"
+   ]
+   proceedings -> scholar [
+      label="editor"
+       href="https://www.wikidata.org/wiki/Property:P98"
+   ]
+   paper -> scholar [
+       label="author"
+       href="https://www.wikidata.org/wiki/Property:P50"
+   ]
+   scholar -> institution [
+       label="affiliation"
+       href="https://www.wikidata.org/wiki/Property:P1416"
+   ]
+   paper -> paper [
+       label="cites"
+       href="https://www.wikidata.org/wiki/Property:P2860"
+   ]
+   paper -> proceedings [
+       label="published in"
+       href="https://www.wikidata.org/wiki/Property:P1433"
+   ]
+   eventseries [
+     label=EventSeries
+      color="blue"
+      fontcolor="blue"
+       shape="box"
+       style="bold"
+       href="https://www.wikidata.org/wiki/Q47258130"
+   ]
+   event [
+     label=Event
+      color="blue"
+      fontcolor="blue"
+      style="bold"
+       shape="box"
+       href="https://www.wikidata.org/wiki/Q2020153"
+   ]
+
+   event -> eventseries [
+       color="blue"
+       fontcolor="blue"
+       label="part of the series"
+       style="bold"
+       href="https://www.wikidata.org/wiki/Property:P179"
+   ]
+   proceedings ->  event [
+      color="blue"
+      fontcolor="blue"
+       label="is proceedings of"
+      style="bold"
+       href="https://www.wikidata.org/wiki/Property:P4745"
+   ]
+
+   { rank = same;paper; scholar; }
+   { rank = same;proceedings; institution; publisher }
+   { rank = same;event; eventseries; }
+}
