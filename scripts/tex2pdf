@@ -2,11 +2,12 @@
 # LaTeX PDF Generation Script
 # Usage: scripts/tex2pdf [--build|--check | --install | --clean | --fonts | -h|--help]
 
-set -e           # Exit immediately if a command exits with a non-zero status
 set -o pipefail  # Return value of a pipeline is the value of the last (failed) command
 
 # name of the main tex file
 MAIN_FILE="main"
+# log file for pdflatex/bibtex output
+LOG_FILE="${MAIN_FILE}.build.log"
 # directory where the script runs
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -41,7 +42,7 @@ EOF
 # cleans aux and log files
 clean_artifacts() {
     warn "Cleaning build artifacts..."
-    rm -f *.aux *.bbl *.blg *.log *.out *.toc *.lof *.lot *.fls *.fdb_latexmk
+    rm -f *.aux *.bbl *.blg *.log *.out *.toc *.lof *.lot *.fls *.fdb_latexmk *.build.log
 }
 
 # Checks for required fonts (warn-only for pdfLaTeX)
@@ -167,13 +168,25 @@ install_fonts_extra() {
     success "Extra fonts installed."
 }
 
-# Run pdflatex without failing on warnings (set -e safe)
+# Run pdflatex, logging output
 run_pdflatex() {
-    local redirect_output="${1:-false}"
-    if [ "$redirect_output" = "true" ]; then
-        pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" > /dev/null || true
-    else
-        pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" || true
+    local pass="$1"
+    pdflatex -interaction=nonstopmode "${MAIN_FILE}.tex" >> "$LOG_FILE" 2>&1
+    return $?
+}
+
+# Run bibtex, logging output
+run_bibtex() {
+    bibtex "${MAIN_FILE}" >> "$LOG_FILE" 2>&1
+    return $?
+}
+
+# Show relevant errors from the log file
+show_log_errors() {
+    if [ -f "$LOG_FILE" ]; then
+        echo ""
+        warn "Build errors from $LOG_FILE:"
+        grep -E "^(!|.*Error|.*undefined)" "$LOG_FILE" | head -30
     fi
 }
 
@@ -185,31 +198,34 @@ build_pdf() {
 
     # Clean before building
     clean_artifacts
+    > "$LOG_FILE"  # Initialize empty log file
 
     action "Building ${MAIN_FILE}..."
 
     # 1. First Pass
     action ">> pdfLaTeX Pass 1..."
-    run_pdflatex
+    run_pdflatex 1 || true
 
     # 2. Bibtex
     if ls *.bib 1>/dev/null 2>&1; then
         action ">> BibTeX..."
-        bibtex "${MAIN_FILE}"
+        run_bibtex || true
     fi
 
     # 3. Second Pass
     action ">> pdfLaTeX Pass 2..."
-    run_pdflatex true
+    run_pdflatex 2 || true
 
     # 4. Final Pass
     action ">> pdfLaTeX Pass 3 (Final)..."
-    run_pdflatex true
+    run_pdflatex 3 || true
 
     if [ -f "${MAIN_FILE}.pdf" ]; then
         success "Build successful: ${MAIN_FILE}.pdf"
     else
-        error "Build failed. Check ${MAIN_FILE}.log for details."
+        error "Build failed. Check $LOG_FILE for details." 0
+        show_log_errors
+        return 1
     fi
 }
 
